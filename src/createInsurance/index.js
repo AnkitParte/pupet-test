@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer-core"
 import { FE_URL } from "../utils/constants.js"
-import { waitForTimeout } from "../utils/functions.js"
 ;(async () => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -73,7 +72,7 @@ import { waitForTimeout } from "../utils/functions.js"
     // console.log(options())
     return options()
   })
-  //   console.log("variantOpt", variantOpt)
+
   await page.select('select[name="variant"]', variantOpt)
   //   waitForTimeout(100)
 
@@ -121,29 +120,10 @@ import { waitForTimeout } from "../utils/functions.js"
   //   await page.click('input[name="idv"]')
   //   await page.type('input[name="idv"]', "50000")
 
-  //   await page.waitForSelector('input[name="idv"]')
-  //   await page.click('input[name="idv"]')
-
-  //   await page.keyboard.down("command") // or 'Command' on macOS
-  //   await page.keyboard.press("a")
-  //   await page.keyboard.up("command") // or 'Command' on macOS
-  //   await page.keyboard.press("delete")
-
-  //   await page.type('input[name="idv"]', "50000")
-
   //   console.log(await page.$('form button[type="submit"]'))
   await page.waitForSelector('form button[type="submit"]') // Replace with the actual selector for the submit button
   //   waitForTimeout(100)
   await page.click('form button[type="submit"]')
-
-  //   await page.focus('select[name="variant"]')
-  //   waitForTimeout(100)
-  //   await page.keyboard.press("ArrowDown")
-  //   waitForTimeout(100)
-  //   await page.keyboard.press("ArrowDown")
-  //   waitForTimeout(100)
-  //   await page.keyboard.press("Enter")
-  //   await page.click()
 
   // await page.select("div#make", await page.$eval("div#make option", (option) => option.value))
 
