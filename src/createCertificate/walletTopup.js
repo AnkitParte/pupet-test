@@ -5,6 +5,7 @@ import { waitForTimeout } from "../utils/functions.js"
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
+    // executablePath: "/opt/homebrew/bin/chromium",
     slowMo: 60,
     ignoreHTTPSErrors: true,
     defaultViewport: null
@@ -12,7 +13,7 @@ import { waitForTimeout } from "../utils/functions.js"
   const page = await browser.newPage()
 
   // Navigate to the login page
-  await page.goto(FE_URL.Test)
+  await page.goto(FE_URL.Loc)
   console.log("successfully went through the url")
 
   // Wait for the email input field to be visible
@@ -57,26 +58,14 @@ import { waitForTimeout } from "../utils/functions.js"
   await page.type('input[name="transactionReferenceNo"]', "8754895")
   console.log("Transaction Reference No. addded succesffuly!")
 
-  // Add Transaction Proof upload
-  const inputUploadHandle = await page.$('input[name="proofFile"]')
+  let fileToUpload = "/Users/ankitparte/ActiveProject/testing-pup/src/fileholder/transactionProof.png"
 
-  let fileToUpload = "../../fileholder/transactionProof.jpg"
-  // inputUploadHandle.uploadFile(fileToUpload)
-
-  // Debug log
-  console.log(`Uploading file from: ${fileToUpload}`)
-
-  // Upload the file
-  try {
-    await inputUploadHandle.uploadFile(fileToUpload)
-    console.log("File uploaded successfully")
-  } catch (err) {
-    console.error("File upload failed:", err)
-    return
-  }
+  //! from policy-gen
+  const uploadButton = await page.$("#proofFile")
+  uploadButton.uploadFile(fileToUpload)
+  //!
   await waitForTimeout(2000)
   console.log("Transaction Proof uploaded successfully!")
-
   // select payment mode
   await page.waitForSelector('select[name="paymentMode"]', { visible: true })
   await page.click('select[name="paymentMode"]')
