@@ -58,16 +58,11 @@ import { waitForTimeout } from "../utils/functions.js"
   await page.type('input[name="transactionReferenceNo"]', "8754895")
   console.log("Transaction Reference No. addded succesffuly!")
 
-  // // Add Transaction Proof upload
-  // const inputUploadHandle = await page.$('input[name="proofFile"]')
-
   let fileToUpload = "/Users/ankitparte/ActiveProject/testing-pup/src/fileholder/transactionProof.png"
-  // inputUploadHandle.uploadFile(fileToUpload)
 
   //! from policy-gen
   const uploadButton = await page.$("#proofFile")
   uploadButton.uploadFile(fileToUpload)
-  // await page.click(`input[value="Upload"]`)
   //!
   await waitForTimeout(2000)
   console.log("Transaction Proof uploaded successfully!")
