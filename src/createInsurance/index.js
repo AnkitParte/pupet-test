@@ -82,7 +82,9 @@ import { FE_URL } from "../utils/constants.js"
   await page.keyboard.press("Enter")
   //   waitForTimeout(100)
 
-  await page.waitForSelector('input[name="registrationDate"]', { visible: true })
+  await page.waitForSelector('input[name="registrationDate"]', {
+    visible: true
+  })
   await page.click('input[name="registrationDate"]')
   await page.type('input[name="registrationDate"]', "10-07-2024")
   //   waitForTimeout(100)
