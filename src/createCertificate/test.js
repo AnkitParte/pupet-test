@@ -6,7 +6,7 @@ import { waitForTimeout } from "../utils/functions.js"
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
     // executablePath: "/opt/homebrew/bin/chromium",
-    slowMo: 10,
+    slowMo: 30,
     ignoreHTTPSErrors: true,
     defaultViewport: null
   })
@@ -14,7 +14,6 @@ import { waitForTimeout } from "../utils/functions.js"
   {
     // Navigate to the login page
     await page.goto(FE_URL.Test)
-
     //console.log("successfully went through the url")
 
     // Wait for the email input field to be visible
@@ -114,7 +113,7 @@ import { waitForTimeout } from "../utils/functions.js"
     await page.waitForSelector('button[type="submit"]', { visible: true })
     await page.click('button[type="submit"]')
     console.log("Form submitted successfully!")
-    await waitForTimeout(2000)
+    await waitForTimeout(5000)
   }
   // ops - admin - accounts
 
@@ -157,84 +156,24 @@ import { waitForTimeout } from "../utils/functions.js"
   waitForTimeout(100)
   console.log("Clicked on view")
 
-  // Click the decline button
-  await page1.waitForSelector("button.btn.btn-danger.btn-sm", {
-    visible: true,
-    timeout: 5000
-  })
+  // Click the approved button
 
-  await page1.click("button.btn.btn-danger.btn-sm")
-  waitForTimeout(200)
-  console.log("Decline button clicked successfully!")
-
-  await page1.waitForSelector("div.modal.fade.show", { visible: true })
-  await page1.waitForSelector("div.modal.fade.show .modal-dialog", {
-    visible: true
-  })
   await page1.waitForSelector(
-    "div.modal.fade.show .modal-dialog .modal-content",
-    { visible: true }
-  )
-  await page1.waitForSelector("div.modal.fade.show .modal-dialog .modal-body", {
-    visible: true
-  })
-  await page1.waitForSelector(
-    'select[id="select-basic"][class="form-control"]',
+    'button[type="button"][class="btn btn-success btn-sm"]',
     {
-      visible: true
+      visible: true,
+      timeout: 6000
     }
   )
+  // Click the "Sign in" button
+  await page1.click('button[type="button"][class="btn btn-success btn-sm"]')
 
-  let item = await page1.$('select[id="select-basic"][class="form-control"]')
-  await page1.click('select[id="select-basic"][class="form-control"]')
-
-  await page1.waitForSelector(
-    'select[id="select-basic"][class="form-control"]',
-    {
-      visible: true
-    }
-  )
-
-  await page1.click('select[id="select-basic"][class="form-control"]')
-
-  let rejectionReasonOpt = await page1.evaluate(() => {
-    const variant = document.querySelector(
-      'select[id="select-basic"][class="form-control"]'
-    )
-    console.log("variant", variant?.childNodes)
-    let options = () => {
-      for (const option of variant?.childNodes) {
-        console.log("option->", option)
-        if (option.value) {
-          option.selected = "selected"
-          return option.getAttribute("value")
-        }
-      }
-    }
-
-    return options()
-  })
-
-  await page1.select(
-    'select[id="select-basic"][class="form-control"]',
-    rejectionReasonOpt
-  )
-  console.log("Rejection Reason selected successfully!")
-
-  const rejectionClick = "/html/body/div[4]/div/div[1]/div/div/div[3]/button[1]"
-  const rejectionClickElement = await page1.waitForSelector(
-    `xpath/${rejectionClick}`
-  )
-  await rejectionClickElement.click()
-  waitForTimeout(100)
-
-  console.log("Rejection Reason succceed !")
+  console.log("Approved button clicked successfully!")
 
   await new Promise((resolve) => setTimeout(resolve, 5000))
-
   // Close the browser
-  await browser.close()
-  console.log("Browser closed!")
+  //await browser.close()
+  //console.log("Browser closed!")
 })().catch((error) => {
   console.error("An error occurred:", error)
 })

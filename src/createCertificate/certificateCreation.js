@@ -8,7 +8,7 @@ async function createCertificate() {
     //executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
-    slowMo: 60,
+    slowMo: 5
   })
 
   // Rest of the code remains the same
@@ -27,6 +27,17 @@ async function createCertificate() {
 
   // Click the submit button
   await page.click('form button[type="submit"]')
+
+  // Add a delay to allow for any post-login processes
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
+  // Wait for the Top-Up element using XPath
+  const certificateCreation = '//*[@id="root"]/div[1]/div[1]/div[3]/ul/li[2]/a'
+  const element = await page.waitForSelector(`xpath/${certificateCreation}`)
+  await element.click()
+  console.log("Clicked on Certificate Creation")
+
+  await new Promise((resolve) => setTimeout(resolve, 5000))
   // Close the browser when done
   await browser.close()
 }

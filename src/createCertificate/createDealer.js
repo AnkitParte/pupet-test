@@ -5,7 +5,7 @@ import { waitForTimeout } from "../utils/functions.js"
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
-    slowMo: 60,
+    slowMo: 5,
     ignoreHTTPSErrors: true,
     defaultViewport: null
   })
@@ -43,7 +43,7 @@ import { waitForTimeout } from "../utils/functions.js"
   console.log("Successfully logged in!")
 
   // Add a delay to allow for any post-login processes
-  await new Promise((resolve) => setTimeout(resolve, 5000))
+  await new Promise((resolve) => setTimeout(resolve, 2000))
 
   // Wait for the Top-Up element using XPath
   const dealerCreation = '//*[@id="root"]/div[1]/div[1]/div[3]/ul/li[3]/a/span'
@@ -121,15 +121,82 @@ import { waitForTimeout } from "../utils/functions.js"
   await page.waitForSelector(".css-lakovd-option")
   await page.click(".css-lakovd-option")
 
-  console.log("element found sucessfully !")
+  console.log("RTO found sucessfully !")
 
   await page.waitForSelector('input[name="pincode"]')
   await page.click('input[name="pincode"]')
   await page.type('input[name="pincode"]', "122001")
   console.log("Pincode Added Successfully!")
 
-  // Search RTO
-  // Wait for the RTO input field
+  // Sales Person
+  await page.waitForSelector("#salesPerson .css-19bb58m", {
+    visible: true
+  })
+  await page.click("#salesPerson .css-19bb58m")
+
+  await page.type("#salesPerson .css-19bb58m", "Ga")
+  console.log("successfully searched sales person.....")
+
+  await page.waitForSelector("#salesPerson .css-ola5lb-menu", { visible: true })
+  waitForTimeout(3000)
+
+  await page.waitForSelector(".css-lakovd-option")
+  await page.click(".css-lakovd-option")
+  console.log("Sales Person found sucessfully !")
+
+  // Dealership Services
+  await page.waitForSelector('select[name="services"]', { visible: true })
+  await page.click('select[name="services"]')
+
+  let servicesOpt = await page.evaluate(() => {
+    const variant = document.querySelector('select[name="services"]')
+    let options = () => {
+      for (const option of variant.childNodes) {
+        console.log("option", option)
+        if (option.value) {
+          option.selected = "selected"
+          return option.getAttribute("value")
+        }
+      }
+    }
+    return options()
+  })
+  await page.select('select[name="services"]', servicesOpt)
+  console.log("Dealership Services selected !")
+
+  //Add Address
+  await page.waitForSelector('input[name="address1"]')
+  await page.click('input[name="address1"]')
+  await page.type('input[name="address1"]', "Sample Address")
+  console.log("Address Added Successfully!")
+
+  // Dealership Owner
+
+  // Name
+  await page.waitForSelector('input[name="ownerName"]')
+  await page.click('input[name="ownerName"]')
+  await page.type('input[name="ownerName"]', " Test Master Dealer Owner")
+  console.log("Owner Name Added Successfully!")
+
+  //Email
+  await page.waitForSelector('input[name="ownerEmail"]')
+  await page.click('input[name="ownerEmail"]')
+  await page.type(
+    'input[name="ownerEmail"]',
+    "masterdealerOwner747328432@test.com"
+  )
+  console.log("Owner Email Added Successfully!")
+
+  // Mobile No.
+  await page.waitForSelector('input[name="ownerMobile"]', { visible: true })
+  await page.click('input[name="ownerMobile"]')
+  await page.type('input[name="ownerMobile"]', "9999999999")
+  console.log("Owner Mobile No. Added Successfully!")
+
+  // Click Next button
+  await page.waitForSelector('button[type="submit"]', { visible: true })
+  await page.click('button[type="submit"]')
+  console.log("Next BUtton Clicked successfully!")
 
   // Add a delay to allow for any post-login processes
   await new Promise((resolve) => setTimeout(resolve, 5000))
