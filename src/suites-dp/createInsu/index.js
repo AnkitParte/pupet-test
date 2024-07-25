@@ -2,7 +2,7 @@ import puppeteer from "puppeteer"
 import { FE_URL } from "../../utils/constants.js"
 import { kycPage } from "./kycPage.js"
 import { quotePage } from "./quotePage.js"
-import { loginPage } from "./loginPage.js"
+import { loginPage } from "../globals/loginPage.js"
 import { policyPage } from "./policyPage.js"
 import { inspectionPage } from "./inspectPage.js"
 
@@ -25,23 +25,22 @@ let args = process.argv.slice(2)
   //? login page
   await loginPage(page)
 
-  // let insuHist = '#root li a[href="/policies/my-insurance"]'
-  // await page.waitForSelector("#root div div")
-  // await page.waitForSelector(insuHist)
-  // await page.click(insuHist)
-
   let isRenew = args.length && args[0] === "renew" ? true : false
+  let renewOpt = args[1]
+  // 1 "Expired in last 90 days"
+  // 2 "Expired for more than 90 days"
+  // else "Not expire"
   //? quote page
-  await quotePage(page, isRenew)
+  await quotePage(page, isRenew, renewOpt)
 
-  if (isRenew) {
+  if (isRenew && renewOpt) {
     await inspectionPage(page)
   }
   //? kyc page
-  // await kycPage(page)
-
+  await kycPage(page)
+  // return
   //? policy page
-  // await policyPage(page)
+  await policyPage(page, isRenew)
 
   // await browser.close();
 })()

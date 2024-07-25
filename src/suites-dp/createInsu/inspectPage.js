@@ -4,9 +4,7 @@ export async function inspectionPage(page) {
   await page.waitForSelector("#Inspection")
 
   let pngFile = "/Users/ankitparte/ActiveProject/testing-pup/src/suites-dp/files/tempSS.png"
-
-  let inspectReport = await page.waitForSelector('input[name="inspectionReport"]')
-  await inspectReport.uploadFile(pngFile)
+  let jpgFile = "/Users/ankitparte/ActiveProject/testing-pup/src/suites-dp/files/tree.jpeg"
 
   let front = await page.waitForSelector('input[name="front"]')
   await front.uploadFile(pngFile)
@@ -29,8 +27,12 @@ export async function inspectionPage(page) {
   let agentPhoto = await page.waitForSelector('input[name="agentNewspaper"]')
   await agentPhoto.uploadFile(pngFile)
 
+  let inspectReport = await page.waitForSelector('input[name="inspectionReport"]')
+  await inspectReport.uploadFile(jpgFile)
+
   let submitSel = '#Inspection form button[type="submit"]'
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
+  await waitForTimeout(2000)
   console.log("Inspection page done")
 }

@@ -1,6 +1,9 @@
+import { waitForTimeout } from "../../utils/functions.js"
+
 export async function kycPage(page) {
   await page.waitForSelector("#KYC")
-  let gender = "#gender0Male"
+  await waitForTimeout(2000)
+  let gender = "#KYC div form #gender0Male"
   await page.waitForSelector(gender)
   await page.click(gender)
 
@@ -9,28 +12,6 @@ export async function kycPage(page) {
 
   await page.click('input[name="lastName"]')
   await page.type('input[name="lastName"]', "Parte")
-
-  //! for date
-  // year selector = /html/body/div[3]/div[1]/div/div/div/input .numInput
-
-  // month selector = /html/body/div body > div.flatpickr-calendar.animate.arrowLeft.rightMost.open.arrowBottom > div.flatpickr-months > div > div > select
-  // .flatpickr-monthDropdown-months" value=11
-
-  ///html/body/div[3]/div[2]/div/div[2]/div/span[6]
-
-  //   const select_date = await page.waitForSelector('input[name="dob"]', {
-  //     visible: true
-  //   })
-  //   await select_date.click()
-  //   console.log("select date visible")
-  //   // xpath = html/body/div[2]/div[2]/div/div[2]/div/span[24]
-  //   const date = "html/body/div[2]/div[2]/div/div[2]/div/span[24]"
-  //   const dateElement = await page.waitForSelector(`xpath/${date}`)
-  //   await dateElement.click()
-  //   console.log("Registration Date added successfully!")
-  //   await page.waitForSelector('input[name="dob"]', {
-  //     visible: true
-  //   })
 
   await page.click('input[name="dob"]')
   await page.waitForSelector(".flatpickr-calendar")
@@ -101,6 +82,6 @@ export async function kycPage(page) {
 
   await page.waitForSelector('#KYC form button[type="submit"]')
   await page.click('#KYC form button[type="submit"]')
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await waitForTimeout(2000)
   console.log("Kyc Page Done")
 }

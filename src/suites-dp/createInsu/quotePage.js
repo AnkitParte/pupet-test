@@ -1,4 +1,6 @@
-export async function quotePage(page, isRenew) {
+import { waitForTimeout } from "../../utils/functions.js"
+
+export async function quotePage(page, isRenew, renewOpt) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
@@ -14,42 +16,58 @@ export async function quotePage(page, isRenew) {
     await page.type(selVehicleNum, "MP22MC8987")
 
     // let expr = "#policyExpiry2Expired"
-    let expr = 'input[value="Expired for more than 90 days"]'
+    let expr
+    if (renewOpt == 1) {
+      expr = 'input[value="Expired in last 90 days"]'
+    } else if (renewOpt == 2) {
+      expr = 'input[value="Expired for more than 90 days"]'
+    } else {
+      expr = 'input[value="Not expire"]'
+    }
     await page.waitForSelector(expr)
     await page.click(expr)
+
+    if (renewOpt != 2) {
+      let claim = "#claimInPreviousPolicy0yes"
+      await page.waitForSelector(claim)
+      await page.click(claim)
+    }
   }
   await page.waitForSelector("div#make")
   await page.click("div#make")
-
   await page.waitForSelector("#make .css-i97cuk-menu", { visible: true })
   await page.click("#make .css-i97cuk-menu")
 
   await page.waitForSelector("div#model")
   await page.click("div#model")
-
   await page.waitForSelector("#model .css-i97cuk-menu", { visible: true })
   await page.click("#model .css-i97cuk-menu")
 
-  await page.waitForSelector('select[name="variant"]', { visible: true })
-  await page.click('select[name="variant"]')
+  await page.waitForSelector("div#variant")
+  await page.click("div#variant")
+  await page.waitForSelector("#variant .css-i97cuk-menu", { visible: true })
+  await page.click("#variant .css-i97cuk-menu")
 
-  let variantOpt = await page.evaluate(() => {
-    const variant = document.querySelector('select[name="variant"]')
-    // console.log("variant", variant)
-    let options = () => {
-      for (const option of variant.childNodes) {
-        console.log("option", option)
-        if (option.value) {
-          option.selected = "selected"
-          return option.getAttribute("value")
-        }
-      }
-    }
-    // console.log(options())
-    return options()
-  })
+  // await page.waitForSelector('select[name="variant"]', { visible: true })
+  // await page.click('select[name="variant"]')
 
-  await page.select('select[name="variant"]', variantOpt)
+  // let variantOpt = await page.evaluate(() => {
+  //   const variant = document.querySelector('select[name="variant"]')
+  //   // console.log("variant", variant)
+  //   let options = () => {
+  //     for (const option of variant.childNodes) {
+  //       console.log("option", option)
+  //       if (option.value) {
+  //         option.selected = "selected"
+  //         return option.getAttribute("value")
+  //       }
+  //     }
+  //   }
+  //   // console.log(options())
+  //   return options()
+  // })
+
+  // await page.select('select[name="variant"]', variantOpt)
 
   //? no need if date is auto-selected
   //   await page.waitForSelector('input[name="riskStartDate"]', { visible: true })
@@ -190,10 +208,11 @@ export async function quotePage(page, isRenew) {
 
   let timeout = 30000
   if (isRenew) {
-    timeout = 80000
+    timeout = 100000
   }
   let verifyKyc = "#verifyKyc" // '//*[@id="instant-quote"]/div/form/div[15]/div/button'
   await page.waitForSelector(verifyKyc, { visible: true, timeout: timeout })
   await page.click(verifyKyc)
+  await waitForTimeout(2000)
   console.log("Quote Page Done")
 }

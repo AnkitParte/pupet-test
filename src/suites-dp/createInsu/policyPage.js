@@ -1,12 +1,14 @@
-export async function policyPage(page) {
+import { waitForTimeout } from "../../utils/functions.js"
+
+export async function policyPage(page, isRenew) {
   await page.waitForSelector("#AdditionalDetails")
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await waitForTimeout(2000)
 
   await page.waitForSelector("#AdditionalDetails div")
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await waitForTimeout(2000)
 
   await page.waitForSelector("#AdditionalDetails div form")
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await waitForTimeout(2000)
 
   let engineNum = '#AdditionalDetails form input[name="engineNumber"]'
   await page.waitForSelector(engineNum)
@@ -14,12 +16,60 @@ export async function policyPage(page) {
   await page.type(engineNum, "ABCDJKLL99")
 
   let chassisNum = '#AdditionalDetails form input[name="chassisNumber"]'
+  await page.waitForSelector(chassisNum)
   await page.click(chassisNum)
-  await page.type(chassisNum, "MA1EC2G34H1234566")
+  await page.type(chassisNum, "MA1EC2G34H1234571")
 
-  let regNum = '#AdditionalDetails form input[name="registrationNumber"]'
-  await page.click(regNum)
-  await page.type(regNum, "AB12CD3456")
+  if (!isRenew) {
+    let regNum = '#AdditionalDetails div form input[name="registrationNumber"]'
+    await page.waitForSelector(regNum)
+    await page.click(regNum)
+    await page.type(regNum, "AB12CD3456")
+  }
+
+  if (isRenew) {
+    //? previous od
+    let prevOd = '#AdditionalDetails form select[name="previousOdInsurer"]'
+    await page.click(prevOd)
+    let prevOdOpt = await page.evaluate(() => {
+      let itemSel = document.querySelector('#AdditionalDetails form select[name="previousOdInsurer"]')
+      let options = () => {
+        for (let it of itemSel.childNodes) {
+          if (it.value) {
+            it.selected = "selected"
+            return it.getAttribute("value")
+          }
+        }
+      }
+      return options()
+    })
+    await page.select(prevOd, prevOdOpt)
+    //? previous od num
+    let prevOdNum = '#AdditionalDetails form input[name="prevOdPolicyNum"]'
+    await page.click(prevOdNum)
+    await page.type(prevOdNum, "ABCDE12345")
+
+    //? previous tp
+    let prevTp = '#AdditionalDetails form select[name="previousTpInsurer"]'
+    await page.click(prevOd)
+    let prevTpOpt = await page.evaluate(() => {
+      let itemSel = document.querySelector('#AdditionalDetails form select[name="previousTpInsurer"]')
+      let options = () => {
+        for (let it of itemSel.childNodes) {
+          if (it.value) {
+            it.selected = "selected"
+            return it.getAttribute("value")
+          }
+        }
+      }
+      return options()
+    })
+    await page.select(prevTp, prevTpOpt)
+    //? previous tp num
+    let prevTpNum = '#AdditionalDetails form input[name="prevTpPolicyNum"]'
+    await page.click(prevTpNum)
+    await page.type(prevTpNum, "ABCDE12345")
+  }
 
   let mobNum = '#AdditionalDetails form input[name="mobileNumber"]'
   await page.click(mobNum)
@@ -61,8 +111,8 @@ export async function policyPage(page) {
   })
   await page.select(nomineeRelation, relOpt)
 
-  let submitSel = '#AdditionalDetails form button[type="submit"]'
-  await page.waitForSelector(submitSel)
-  await page.click(submitSel)
+  // let submitSel = '#AdditionalDetails form button[type="submit"]'
+  // await page.waitForSelector(submitSel)
+  // await page.click(submitSel)
   console.log("Policy Page Done")
 }
