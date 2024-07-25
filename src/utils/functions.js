@@ -1,5 +1,5 @@
-export function waitForTimeout(delay) {
-  return new Promise((resolve) => setTimeout(resolve, delay))
+export const waitForTimeout = async (delay) => {
+  return await new Promise((resolve) => setTimeout(resolve, delay || 1000))
 }
 
 const selectDropdownOptionByLabel = async (page, selector, value, minOptions = 2) => {
