@@ -25,3 +25,28 @@ const selectDropdownOptionByLabel = async (page, selector, value, minOptions = 2
   if (!optionValue) console.info({ selector, value })
   await page.select(selector, optionValue)
 }
+
+export const chooseOptViaSelector = async ({ page, selector, optVal = "" }) => {
+  let prevOd = selector
+  await page.click(prevOd)
+  let prevOdOpt = await page.evaluate(
+    (selector, optVal) => {
+      let itemSel = document.querySelector(selector)
+      let options = () => {
+        for (let it of itemSel.childNodes) {
+          if (optVal && it?.value && optVal == it?.value) {
+            it.selected = "selected"
+            return it.getAttribute("value")
+          } else if (it?.value) {
+            it.selected = "selected"
+            return it.getAttribute("value")
+          }
+        }
+      }
+      return options()
+    },
+    selector,
+    optVal
+  )
+  await page.select(prevOd, prevOdOpt)
+}
