@@ -27,9 +27,9 @@ const selectDropdownOptionByLabel = async (page, selector, value, minOptions = 2
 }
 
 export const chooseOptViaSelector = async ({ page, selector, optVal = "" }) => {
-  let prevOd = selector
-  await page.click(prevOd)
-  let prevOdOpt = await page.evaluate(
+  let selectTag = selector
+  await page.click(selectTag)
+  let chosenOpt = await page.evaluate(
     (selector, optVal) => {
       let itemSel = document.querySelector(selector)
       let options = () => {
@@ -48,5 +48,5 @@ export const chooseOptViaSelector = async ({ page, selector, optVal = "" }) => {
     selector,
     optVal
   )
-  await page.select(prevOd, prevOdOpt)
+  await page.select(selectTag, chosenOpt)
 }
