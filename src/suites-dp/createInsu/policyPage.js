@@ -1,14 +1,14 @@
 import { waitForTimeout } from "../../utils/functions.js"
 
-export async function policyPage(page, isRenew) {
+export async function policyPage(page, isRenew, renewOpt) {
   await page.waitForSelector("#AdditionalDetails")
-  await waitForTimeout(2000)
+  await waitForTimeout(1500)
 
   await page.waitForSelector("#AdditionalDetails div")
-  await waitForTimeout(2000)
+  await waitForTimeout(1500)
 
   await page.waitForSelector("#AdditionalDetails div form")
-  await waitForTimeout(2000)
+  await waitForTimeout(1500)
 
   let engineNum = '#AdditionalDetails form input[name="engineNumber"]'
   await page.waitForSelector(engineNum)
@@ -18,7 +18,7 @@ export async function policyPage(page, isRenew) {
   let chassisNum = '#AdditionalDetails form input[name="chassisNumber"]'
   await page.waitForSelector(chassisNum)
   await page.click(chassisNum)
-  await page.type(chassisNum, "MA1EC2G34H1234571")
+  await page.type(chassisNum, "MA1EC2G34H1234584")
 
   if (!isRenew) {
     let regNum = '#AdditionalDetails div form input[name="registrationNumber"]'
@@ -28,7 +28,7 @@ export async function policyPage(page, isRenew) {
   }
 
   if (isRenew) {
-    //? previous od
+    // //? previous od
     let prevOd = '#AdditionalDetails form select[name="previousOdInsurer"]'
     await page.click(prevOd)
     let prevOdOpt = await page.evaluate(() => {
@@ -44,12 +44,31 @@ export async function policyPage(page, isRenew) {
       return options()
     })
     await page.select(prevOd, prevOdOpt)
-    //? previous od num
+    // //? previous od num
     let prevOdNum = '#AdditionalDetails form input[name="prevOdPolicyNum"]'
     await page.click(prevOdNum)
     await page.type(prevOdNum, "ABCDE12345")
 
-    //? previous tp
+    //? previous od date
+    let odEndDate = 'input[name="odEndDate"]'
+    await page.click(odEndDate)
+    let strCalender = "body > div.flatpickr-calendar.animate.open .flatpickr-days .dayContainer"
+    await page.waitForSelector(strCalender)
+    let odDateVal = await page.evaluate((selector) => {
+      const selItem = document.querySelector(selector)
+
+      for (const span of selItem.childNodes) {
+        if (span.getAttribute("class") === "flatpickr-day") {
+          // console.log("span.arial-label -> ", span.getAttribute("aria-label"))
+          return span.getAttribute("aria-label")
+        }
+      }
+    }, strCalender)
+    strCalender += ` span[aria-label="${odDateVal}"]`
+    await page.waitForSelector(`${strCalender}`)
+    await page.click(`${strCalender}`)
+
+    // //? previous tp
     let prevTp = '#AdditionalDetails form select[name="previousTpInsurer"]'
     await page.click(prevOd)
     let prevTpOpt = await page.evaluate(() => {
@@ -65,19 +84,40 @@ export async function policyPage(page, isRenew) {
       return options()
     })
     await page.select(prevTp, prevTpOpt)
-    //? previous tp num
+    // //? previous tp num
     let prevTpNum = '#AdditionalDetails form input[name="prevTpPolicyNum"]'
     await page.click(prevTpNum)
     await page.type(prevTpNum, "ABCDE12345")
+    //? previous tp date
+    let tpEndDate = 'input[name="tpEndDate"]'
+    await page.click(tpEndDate)
+    let strCalender2 = "body > div.flatpickr-calendar.animate.open .flatpickr-days .dayContainer"
+    await page.waitForSelector(strCalender2)
+    let tpDateVal = await page.evaluate((selector) => {
+      const selItem = document.querySelector(selector)
+
+      for (const span of selItem.childNodes) {
+        if (span.getAttribute("class") === "flatpickr-day") {
+          // console.log("span.arial-label -> ", span.getAttribute("aria-label"))
+          return span.getAttribute("aria-label")
+        }
+      }
+    }, strCalender2)
+    strCalender2 += ` span[aria-label="${tpDateVal}"]`
+    await page.waitForSelector(`${strCalender2}`)
+    await page.click(`${strCalender2}`)
+    // return
   }
 
   let mobNum = '#AdditionalDetails form input[name="mobileNumber"]'
   await page.click(mobNum)
   await page.type(mobNum, "9129129988")
 
-  let address = '#AdditionalDetails form input[name="addressPrimary"]'
-  await page.click(address)
-  await page.type(address, "LIG colony Sector 31")
+  if (!isRenew) {
+    let address = '#AdditionalDetails form input[name="addressPrimary"]'
+    await page.click(address)
+    await page.type(address, "LIG colony Sector 31")
+  }
 
   let email = '#AdditionalDetails form input[name="email"]'
   await page.click(email)
@@ -111,8 +151,13 @@ export async function policyPage(page, isRenew) {
   })
   await page.select(nomineeRelation, relOpt)
 
-  // let submitSel = '#AdditionalDetails form button[type="submit"]'
-  // await page.waitForSelector(submitSel)
-  // await page.click(submitSel)
+  let submitSel = "#previewPolicy"
+  await page.waitForSelector(submitSel)
+  await page.click(submitSel)
+
+  let createPolicySel = "#createPolicy"
+  await page.waitForSelector(createPolicySel)
+  await page.click(createPolicySel)
+
   console.log("Policy Page Done")
 }

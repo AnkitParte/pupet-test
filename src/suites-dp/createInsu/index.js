@@ -32,15 +32,16 @@ let args = process.argv.slice(2)
   // else "Not expire"
   //? quote page
   await quotePage(page, isRenew, renewOpt)
-
+  // return
   if (isRenew && renewOpt) {
     await inspectionPage(page)
   }
+  // return
   //? kyc page
-  await kycPage(page)
+  await kycPage(page, isRenew)
   // return
   //? policy page
-  await policyPage(page, isRenew)
+  await policyPage(page, isRenew, renewOpt)
 
   // await browser.close();
 })()

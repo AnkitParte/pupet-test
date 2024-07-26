@@ -55,7 +55,7 @@ import { chooseOptViaSelector } from "../../utils/functions.js"
   let dealerDecl = await page.waitForSelector(proofTwo)
   await dealerDecl.uploadFile(testPdf)
 
-  let submitSel = "#cancelPolicyModal"
+  let submitSel = "#requestCancelPolicyBtn"
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
   // await browser.close();

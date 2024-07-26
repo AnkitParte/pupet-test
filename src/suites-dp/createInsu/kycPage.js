@@ -1,17 +1,19 @@
 import { waitForTimeout } from "../../utils/functions.js"
 
-export async function kycPage(page) {
+export async function kycPage(page, isRenew) {
   await page.waitForSelector("#KYC")
-  await waitForTimeout(2000)
+  // await waitForTimeout(1000)
   let gender = "#KYC div form #gender0Male"
   await page.waitForSelector(gender)
   await page.click(gender)
 
-  await page.click('input[name="firstName"]')
-  await page.type('input[name="firstName"]', "Ankit")
+  if (!isRenew) {
+    await page.click('input[name="firstName"]')
+    await page.type('input[name="firstName"]', "Ankit")
 
-  await page.click('input[name="lastName"]')
-  await page.type('input[name="lastName"]', "Parte")
+    await page.click('input[name="lastName"]')
+    await page.type('input[name="lastName"]', "Parte")
+  }
 
   await page.click('input[name="dob"]')
   await page.waitForSelector(".flatpickr-calendar")

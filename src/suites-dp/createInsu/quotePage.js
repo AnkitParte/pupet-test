@@ -4,7 +4,6 @@ export async function quotePage(page, isRenew, renewOpt) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
-
   if (isRenew) {
     let selRenewPol = "#newPolicy1false"
     await page.waitForSelector(selRenewPol)
@@ -13,19 +12,20 @@ export async function quotePage(page, isRenew, renewOpt) {
     let selVehicleNum = 'input[name="vehicleRegistrationNumb"]'
     await page.waitForSelector(selVehicleNum)
     await page.click(selVehicleNum)
-    await page.type(selVehicleNum, "MP22MC8987")
+    await page.type(selVehicleNum, "MP22MC8988")
 
     // let expr = "#policyExpiry2Expired"
-    let expr
-    if (renewOpt == 1) {
-      expr = 'input[value="Expired in last 90 days"]'
-    } else if (renewOpt == 2) {
-      expr = 'input[value="Expired for more than 90 days"]'
-    } else {
-      expr = 'input[value="Not expire"]'
-    }
-    await page.waitForSelector(expr)
-    await page.click(expr)
+    // let expr
+    // console.log("renewOpt -> ", renewOpt)
+    // if (renewOpt == 1) {
+    //   expr = 'input[value="Expired in last 90 days"]'
+    // } else if (renewOpt == 2) {
+    //   expr = 'input[value="Expired for more than 90 days"]'
+    // } else {
+    //   expr = 'input[value="Not expire"]'
+    // }
+    // await page.waitForSelector(expr)
+    // await page.click(expr)
 
     if (renewOpt != 2) {
       let claim = "#claimInPreviousPolicy0yes"
@@ -190,6 +190,7 @@ export async function quotePage(page, isRenew, renewOpt) {
   //   await page.waitForSelector('input[name="pincode"]')
   await page.click('input[name="pincode"]')
   await page.type('input[name="pincode"]', "122001")
+  await waitForTimeout(1000)
 
   if (isRenew) {
     await page.waitForSelector('input[name="idv"]')
@@ -211,6 +212,7 @@ export async function quotePage(page, isRenew, renewOpt) {
     timeout = 100000
   }
   let verifyKyc = "#verifyKyc" // '//*[@id="instant-quote"]/div/form/div[15]/div/button'
+  await waitForTimeout(1000)
   await page.waitForSelector(verifyKyc, { visible: true, timeout: timeout })
   await page.click(verifyKyc)
   await waitForTimeout(2000)
