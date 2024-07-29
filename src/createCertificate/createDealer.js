@@ -1,6 +1,13 @@
 import puppeteer from "puppeteer"
 import { FE_URL } from "../utils/constants.js"
 import { waitForTimeout } from "../utils/functions.js"
+
+// Function to generate a random email
+function generateRandomEmail(baseEmail, domain) {
+  const randomNumber = Math.floor(Math.random() * 1000) + 1 // Random number between 1 and 1000
+  const [username, _] = baseEmail.split("@")
+  return `${username}+${randomNumber}@${domain}`
+}
 ;(async () => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -64,10 +71,21 @@ import { waitForTimeout } from "../utils/functions.js"
     console.log("Legal Name Added Successfully!")
 
     // Fill Email
+    //await page.waitForSelector('input[name="email"]')
+    //await page.click('input[name="email"]')
+    //await page.type('input[name="email"]', "masterdealer@test.com")
+    //console.log("Email Added Successfully!")
+
+    const randomDealerEmail = generateRandomEmail(
+      "masterdealer@test.com",
+      "test.com"
+    )
+
+    // Dealer email
     await page.waitForSelector('input[name="email"]')
     await page.click('input[name="email"]')
-    await page.type('input[name="email"]', "masterdealer@test.com")
-    console.log("Email Added Successfully!")
+    await page.type('input[name="email"]', randomDealerEmail)
+    console.log(`Dealer Email Added Successfully: ${randomDealerEmail}`)
 
     // Fill Mobile No.
     await page.waitForSelector('input[name="mobile"]', { visible: true })
@@ -179,13 +197,23 @@ import { waitForTimeout } from "../utils/functions.js"
   console.log("Owner Name Added Successfully!")
 
   //Email
+  //await page.waitForSelector('input[name="ownerEmail"]')
+  //await page.click('input[name="ownerEmail"]')
+  //await page.type(
+  //'input[name="ownerEmail"]',
+  //"masterdealerOwner747328432@test.com"
+  //)
+  //console.log("Owner Email Added Successfully!")
+
+  const randomOwnerEmail = generateRandomEmail(
+    "masterdealerowner@test.com",
+    "test.com"
+  )
+  // Owner email
   await page.waitForSelector('input[name="ownerEmail"]')
   await page.click('input[name="ownerEmail"]')
-  await page.type(
-    'input[name="ownerEmail"]',
-    "masterdealerOwner747328432@test.com"
-  )
-  console.log("Owner Email Added Successfully!")
+  await page.type('input[name="ownerEmail"]', randomOwnerEmail)
+  console.log(`Owner Email Added Successfully: ${randomOwnerEmail}`)
 
   // Mobile No.
   await page.waitForSelector('input[name="ownerMobile"]', { visible: true })
@@ -198,9 +226,62 @@ import { waitForTimeout } from "../utils/functions.js"
   await page.click('button[type="submit"]')
   console.log("Next BUtton Clicked successfully!")
 
+  const ok = "/html/body/div[2]/div/div[3]/button[1]"
+  const okelement = await page.waitForSelector(`xpath/${ok}`)
+  await okelement.click()
+  console.log("Clicked on Create Dealer")
+
+  // GST no
+  await page.waitForSelector('input[name="dsGSTNum"]', { visible: true })
+  await page.click('input[name="dsGSTNum"]')
+  await page.type('input[name="dsGSTNum"]', "55KLION4789RYZ5")
+  console.log("GST No. Added Successfully!")
+
+  // pan uploaded
+
+  let fileToUploadPAN =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/pan.png"
+
+  const uploadPAN = await page.waitForSelector("#panDs")
+  await uploadPAN.uploadFile(fileToUploadPAN)
+  console.log("PAN uploaded successfully!")
+
+  let fileToUploadCancelledCheck =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+
+  const cancelledCheck = await page.waitForSelector("#cancelledChequeDs")
+  await cancelledCheck.uploadFile(fileToUploadCancelledCheck)
+  console.log("Cancelled Check uploaded successfully!")
+
+  let fileToUploadGSTDocs =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+
+  const GSTDocs = await page.waitForSelector("#gstDs")
+  await GSTDocs.uploadFile(fileToUploadGSTDocs)
+  console.log("Cancelled Check uploaded successfully!")
+
+  let makeDivClass = ".css-b62m3t-container"
+
+  await page.waitForSelector(makeDivClass)
+
+  await page.click(makeDivClass)
+  let temp = await page.evaluate(() => {
+    let item = document.querySelector(".css-b62m3t-container")
+    console.info("item make -> ", item)
+    console.error("item make -> ", item)
+    return item
+  })
+  console.log("temp -> ", temp)
+
+  await page.waitForSelector(".css-hlgwow")
+  await page.click(".css-hlgwow")
+
+  await page.waitForSelector(".css-19bb58m")
+  await page.click(".css-19bb58m")
+
   // Add a delay to allow for any post-login processes
   await new Promise((resolve) => setTimeout(resolve, 5000))
 
   // await browser.close()
-  console.log("Browser closed")
+  //console.log("Browser closed")
 })()
