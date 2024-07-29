@@ -16,6 +16,9 @@
 <li> <code>npm install</code> </li>
 <li><code>cd src</code></li>
 <li><code>cd suites-ap</code></li>
+<li>In index.js of createInsu, there is requirement of chromium path on your device if don't have chromium then comment down this line
+<code>executablePath: "/opt/homebrew/bin/chromium"</code>
+</li>
 <li>then run the CLI commands</li>
 </ul>
 
