@@ -15,10 +15,11 @@ export async function policyPage({ page, isRenew, renewOpt, customerType }) {
   await page.click(engineNum)
   await page.type(engineNum, "ABCDJKLL99")
 
+  let randomNum = "MA1EC2G34H12" + Math.floor(Math.random() * 100000)
   let chassisNum = '#AdditionalDetails form input[name="chassisNumber"]'
   await page.waitForSelector(chassisNum)
   await page.click(chassisNum)
-  await page.type(chassisNum, "MA1EC2G34H1234617")
+  await page.type(chassisNum, randomNum)
 
   if (!isRenew) {
     let regNum = '#AdditionalDetails div form input[name="registrationNumber"]'

@@ -18,8 +18,8 @@ let args = process.argv.slice(2)
   })
   const page = await browser.newPage()
 
-  console.log(FE_URL.Loc)
-  await page.goto(FE_URL.Loc)
+  console.log(FE_URL.Dev)
+  await page.goto(FE_URL.Dev)
   //   await page.setViewport({ width: 1080, height: 900 })
 
   //? login page
