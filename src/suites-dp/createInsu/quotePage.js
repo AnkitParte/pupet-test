@@ -1,22 +1,23 @@
-import { waitForTimeout } from "../../utils/functions.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
 
-export async function quotePage(page, isRenew, renewOpt) {
+export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
-
   if (isRenew) {
     let selRenewPol = "#newPolicy1false"
     await page.waitForSelector(selRenewPol)
     await page.click(selRenewPol)
 
+    let randomNum = "MP22MC" + Math.floor(Math.random() * 10000)
     let selVehicleNum = 'input[name="vehicleRegistrationNumb"]'
     await page.waitForSelector(selVehicleNum)
     await page.click(selVehicleNum)
-    await page.type(selVehicleNum, "MP22MC8987")
-
-    // let expr = "#policyExpiry2Expired"
-    let expr
+    await page.type(selVehicleNum, randomNum)
+    await waitForTimeout(1000)
+    let expr = "#policyExpiry2Expired"
+    // let expr
+    console.log("renewOpt -> ", renewOpt)
     if (renewOpt == 1) {
       expr = 'input[value="Expired in last 90 days"]'
     } else if (renewOpt == 2) {
@@ -74,22 +75,6 @@ export async function quotePage(page, isRenew, renewOpt) {
   //   await page.click('input[name="riskStartDate"]')
   //   await page.keyboard.press("Enter")
 
-  //? registration date selector old
-  //   await page.waitForSelector('input[name="registrationDate"]', {
-  //     visible: true
-  //   })
-  //   await page.click('input[name="registrationDate"]')
-  //   await page.type('input[name="registrationDate"]', "10-07-2024")
-
-  //? registration date select new
-  // Add Registration Date
-  const select_date = await page.waitForSelector('input[name="registrationDate"]', {
-    visible: true
-  })
-  await select_date.click()
-  // console.log("select date visible")
-  // /html/body/div[2]/div[2]/div/div[2]/div/span[8]
-  // body > div.flatpickr-calendar.animate.arrowBottom.arrowLeft.open > div.flatpickr-innerContainer > div > div.flatpickr-days > div > span:nth-child(8)
   if (isRenew) {
     // let regDate = "body > div.flatpickr-calendar.animate.open .flatpickr-days .dayContainer span:nth-child(10)"
     let coverageSel = 'select[name="coverage"]'
@@ -158,38 +143,47 @@ export async function quotePage(page, isRenew, renewOpt) {
     await page.click(dobDate)
     //!
   } else {
-    let date = "html/body/div[2]/div[2]/div/div[2]/div/span[24]"
-    let dateElement = await page.waitForSelector(`xpath/${date}`)
-    await dateElement.click()
-  }
+    //? registration date select new
+    let regDate = 'input[name="registrationDate"]'
+    const select_date = await page.waitForSelector(regDate, {
+      visible: true
+    })
+    await select_date.click()
 
+    let strCalender = "body > div.flatpickr-calendar.animate.open .flatpickr-days .dayContainer"
+    await page.waitForSelector(strCalender)
+    let odDateVal = await page.evaluate((selector) => {
+      const selItem = document.querySelector(selector)
+
+      for (const span of selItem.childNodes) {
+        if (span.getAttribute("class") === "flatpickr-day") {
+          // console.log("span.arial-label -> ", span.getAttribute("aria-label"))
+          return span.getAttribute("aria-label")
+        }
+      }
+    }, strCalender)
+    strCalender += ` span[aria-label="${odDateVal}"]`
+    await page.waitForSelector(`${strCalender}`)
+    await page.click(`${strCalender}`)
+  }
   // console.log("Registration Date added successfully!")
 
   //? customer type auto-selected
   //   await page.waitForSelector('select[name="customerType"]', { visible: true })
+  let customerTypeSel = 'select[name="customerType"]'
   await page.click('select[name="customerType"]')
-
-  let customerTypeOpt = await page.evaluate(() => {
-    const variant = document.querySelector('select[name="customerType"]')
-    // console.log("customerType", variant)
-    let options = () => {
-      for (const option of variant.childNodes) {
-        console.log("option", option)
-        if (option.value) {
-          option.selected = "selected"
-          return option.getAttribute("value")
-        }
-      }
-    }
-    // console.log(options())
-    return options()
-  })
-  //   console.log("customerTypeOpt", customerTypeOpt)
-  await page.select('select[name="customerType"]', customerTypeOpt)
+  console.log("customerType -> ", customerType)
+  await chooseOptViaSelector({ page, selector: customerTypeSel, optVal: `${customerType}` || "I" })
 
   //   await page.waitForSelector('input[name="pincode"]')
-  await page.click('input[name="pincode"]')
-  await page.type('input[name="pincode"]', "122001")
+  let pincodeSel = 'input[name="pincode"]'
+  // await page.click(pincodeSel)
+  await page.focus(pincodeSel)
+  await page.evaluate((selector) => {
+    document.querySelector(selector).value = ""
+  }, pincodeSel)
+  await page.type(pincodeSel, "122001")
+  await waitForTimeout(1000)
 
   if (isRenew) {
     await page.waitForSelector('input[name="idv"]')
@@ -210,7 +204,9 @@ export async function quotePage(page, isRenew, renewOpt) {
   if (isRenew) {
     timeout = 100000
   }
+  // return
   let verifyKyc = "#verifyKyc" // '//*[@id="instant-quote"]/div/form/div[15]/div/button'
+  await waitForTimeout(1000)
   await page.waitForSelector(verifyKyc, { visible: true, timeout: timeout })
   await page.click(verifyKyc)
   await waitForTimeout(2000)
