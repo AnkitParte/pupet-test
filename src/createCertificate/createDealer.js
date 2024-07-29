@@ -12,7 +12,8 @@ function generateRandomEmail(baseEmail, domain) {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
-    slowMo: 5,
+    slowMo: 20,
+    // executablePath: "/opt/homebrew/bin/chromium",
     ignoreHTTPSErrors: true,
     defaultViewport: null
   })
@@ -29,15 +30,11 @@ function generateRandomEmail(baseEmail, domain) {
   })
 
   // Clear and type the email address
-  await page.evaluate(
-    () => (document.querySelector('input[type="email"]').value = "")
-  )
+  await page.evaluate(() => (document.querySelector('input[type="email"]').value = ""))
   await page.type('input[type="email"]', "arpita@aegiscovenant.com")
 
   // Clear and type the password
-  await page.evaluate(
-    () => (document.querySelector('input[type="password"]').value = "")
-  )
+  await page.evaluate(() => (document.querySelector('input[type="password"]').value = ""))
   await page.type('input[type="password"]', "Arpita828!")
 
   // Wait for the "Sign in" button to be visible
@@ -76,10 +73,7 @@ function generateRandomEmail(baseEmail, domain) {
     //await page.type('input[name="email"]', "masterdealer@test.com")
     //console.log("Email Added Successfully!")
 
-    const randomDealerEmail = generateRandomEmail(
-      "masterdealer@test.com",
-      "test.com"
-    )
+    const randomDealerEmail = generateRandomEmail("masterdealer@test.com", "test.com")
 
     // Dealer email
     await page.waitForSelector('input[name="email"]')
@@ -101,9 +95,7 @@ function generateRandomEmail(baseEmail, domain) {
     //   waitForTimeout(100)
 
     let distributorIdOpt = await page.evaluate(() => {
-      const distributorId = document.querySelector(
-        'select[name="distributorId"]'
-      )
+      const distributorId = document.querySelector('select[name="distributorId"]')
       console.log("distributorId dom", distributorId)
       let options = () => {
         for (const option of distributorId.childNodes) {
@@ -205,10 +197,7 @@ function generateRandomEmail(baseEmail, domain) {
   //)
   //console.log("Owner Email Added Successfully!")
 
-  const randomOwnerEmail = generateRandomEmail(
-    "masterdealerowner@test.com",
-    "test.com"
-  )
+  const randomOwnerEmail = generateRandomEmail("masterdealerowner@test.com", "test.com")
   // Owner email
   await page.waitForSelector('input[name="ownerEmail"]')
   await page.click('input[name="ownerEmail"]')
@@ -239,22 +228,19 @@ function generateRandomEmail(baseEmail, domain) {
 
   // pan uploaded
 
-  let fileToUploadPAN =
-    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/pan.png"
+  let fileToUploadPAN = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/pan.png"
 
   const uploadPAN = await page.waitForSelector("#panDs")
   await uploadPAN.uploadFile(fileToUploadPAN)
   console.log("PAN uploaded successfully!")
 
-  let fileToUploadCancelledCheck =
-    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+  let fileToUploadCancelledCheck = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
 
   const cancelledCheck = await page.waitForSelector("#cancelledChequeDs")
   await cancelledCheck.uploadFile(fileToUploadCancelledCheck)
   console.log("Cancelled Check uploaded successfully!")
 
-  let fileToUploadGSTDocs =
-    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+  let fileToUploadGSTDocs = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
 
   const GSTDocs = await page.waitForSelector("#gstDs")
   await GSTDocs.uploadFile(fileToUploadGSTDocs)
@@ -265,13 +251,10 @@ function generateRandomEmail(baseEmail, domain) {
   await page.waitForSelector(makeDivClass)
 
   await page.click(makeDivClass)
-  let temp = await page.evaluate(() => {
-    let item = document.querySelector(".css-b62m3t-container")
-    console.info("item make -> ", item)
-    console.error("item make -> ", item)
-    return item
-  })
-  console.log("temp -> ", temp)
+  await page.waitForSelector(".css-10wo9uf-option")
+  await page.click(".css-10wo9uf-option")
+  await page.click(".css-10wo9uf-option")
+  await page.click(".css-10wo9uf-option")
 
   await page.waitForSelector(".css-hlgwow")
   await page.click(".css-hlgwow")
