@@ -1,6 +1,6 @@
-import { waitForTimeout } from "../../utils/functions.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
 
-export async function quotePage(page, isRenew, renewOpt) {
+export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
@@ -12,20 +12,20 @@ export async function quotePage(page, isRenew, renewOpt) {
     let selVehicleNum = 'input[name="vehicleRegistrationNumb"]'
     await page.waitForSelector(selVehicleNum)
     await page.click(selVehicleNum)
-    await page.type(selVehicleNum, "MP22MC8988")
-
-    // let expr = "#policyExpiry2Expired"
+    await page.type(selVehicleNum, "MP22MC9003")
+    await waitForTimeout(1000)
+    let expr = "#policyExpiry2Expired"
     // let expr
-    // console.log("renewOpt -> ", renewOpt)
-    // if (renewOpt == 1) {
-    //   expr = 'input[value="Expired in last 90 days"]'
-    // } else if (renewOpt == 2) {
-    //   expr = 'input[value="Expired for more than 90 days"]'
-    // } else {
-    //   expr = 'input[value="Not expire"]'
-    // }
-    // await page.waitForSelector(expr)
-    // await page.click(expr)
+    console.log("renewOpt -> ", renewOpt)
+    if (renewOpt == 1) {
+      expr = 'input[value="Expired in last 90 days"]'
+    } else if (renewOpt == 2) {
+      expr = 'input[value="Expired for more than 90 days"]'
+    } else {
+      expr = 'input[value="Not expire"]'
+    }
+    await page.waitForSelector(expr)
+    await page.click(expr)
 
     if (renewOpt != 2) {
       let claim = "#claimInPreviousPolicy0yes"
@@ -162,34 +162,23 @@ export async function quotePage(page, isRenew, renewOpt) {
     let dateElement = await page.waitForSelector(`xpath/${date}`)
     await dateElement.click()
   }
-
   // console.log("Registration Date added successfully!")
 
   //? customer type auto-selected
   //   await page.waitForSelector('select[name="customerType"]', { visible: true })
+  let customerTypeSel = 'select[name="customerType"]'
   await page.click('select[name="customerType"]')
-
-  let customerTypeOpt = await page.evaluate(() => {
-    const variant = document.querySelector('select[name="customerType"]')
-    // console.log("customerType", variant)
-    let options = () => {
-      for (const option of variant.childNodes) {
-        console.log("option", option)
-        if (option.value) {
-          option.selected = "selected"
-          return option.getAttribute("value")
-        }
-      }
-    }
-    // console.log(options())
-    return options()
-  })
-  //   console.log("customerTypeOpt", customerTypeOpt)
-  await page.select('select[name="customerType"]', customerTypeOpt)
+  console.log("customerType -> ", customerType)
+  await chooseOptViaSelector({ page, selector: customerTypeSel, optVal: `${customerType}` || "I" })
 
   //   await page.waitForSelector('input[name="pincode"]')
-  await page.click('input[name="pincode"]')
-  await page.type('input[name="pincode"]', "122001")
+  let pincodeSel = 'input[name="pincode"]'
+  // await page.click(pincodeSel)
+  await page.focus(pincodeSel)
+  await page.evaluate((selector) => {
+    document.querySelector(selector).value = ""
+  }, pincodeSel)
+  await page.type(pincodeSel, "122001")
   await waitForTimeout(1000)
 
   if (isRenew) {

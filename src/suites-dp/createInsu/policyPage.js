@@ -1,14 +1,14 @@
-import { waitForTimeout } from "../../utils/functions.js"
+import { clearSelectorValue, waitForTimeout } from "../../utils/functions.js"
 
-export async function policyPage(page, isRenew, renewOpt) {
+export async function policyPage({ page, isRenew, renewOpt, customerType }) {
   await page.waitForSelector("#AdditionalDetails")
-  await waitForTimeout(1500)
+  await waitForTimeout(2000)
 
   await page.waitForSelector("#AdditionalDetails div")
-  await waitForTimeout(1500)
+  await waitForTimeout(2000)
 
   await page.waitForSelector("#AdditionalDetails div form")
-  await waitForTimeout(1500)
+  await waitForTimeout(2000)
 
   let engineNum = '#AdditionalDetails form input[name="engineNumber"]'
   await page.waitForSelector(engineNum)
@@ -18,7 +18,7 @@ export async function policyPage(page, isRenew, renewOpt) {
   let chassisNum = '#AdditionalDetails form input[name="chassisNumber"]'
   await page.waitForSelector(chassisNum)
   await page.click(chassisNum)
-  await page.type(chassisNum, "MA1EC2G34H1234584")
+  await page.type(chassisNum, "MA1EC2G34H1234617")
 
   if (!isRenew) {
     let regNum = '#AdditionalDetails div form input[name="registrationNumber"]'
@@ -113,43 +113,44 @@ export async function policyPage(page, isRenew, renewOpt) {
   await page.click(mobNum)
   await page.type(mobNum, "9129129988")
 
-  if (!isRenew) {
-    let address = '#AdditionalDetails form input[name="addressPrimary"]'
-    await page.click(address)
-    await page.type(address, "LIG colony Sector 31")
-  }
+  let address = '#AdditionalDetails form input[name="addressPrimary"]'
+  await page.click(address)
+  await clearSelectorValue(page, address)
+  await page.type(address, "LIG colony Sector 31")
 
   let email = '#AdditionalDetails form input[name="email"]'
   await page.click(email)
   await page.type(email, "ankit@aegiscovenant.com")
 
-  let gender = "#AdditionalDetails form #genderNominee0Male"
-  await page.waitForSelector(gender)
-  await page.click(gender)
+  if (customerType == "I") {
+    let gender = "#AdditionalDetails form #genderNominee0Male"
+    await page.waitForSelector(gender)
+    await page.click(gender)
 
-  let nomineeName = '#AdditionalDetails form input[name="nomineeName"]'
-  await page.click(nomineeName)
-  await page.type(nomineeName, "Nomu")
+    let nomineeName = '#AdditionalDetails form input[name="nomineeName"]'
+    await page.click(nomineeName)
+    await page.type(nomineeName, "Nomu")
 
-  let nomineeAge = '#AdditionalDetails form input[name="nomineeAge"]'
-  await page.click(nomineeAge)
-  await page.type(nomineeAge, "24")
+    let nomineeAge = '#AdditionalDetails form input[name="nomineeAge"]'
+    await page.click(nomineeAge)
+    await page.type(nomineeAge, "24")
 
-  let nomineeRelation = '#AdditionalDetails form select[name="nomineeRelation"]'
-  await page.click(nomineeRelation)
-  let relOpt = await page.evaluate(() => {
-    let relSel = document.querySelector('#AdditionalDetails form select[name="nomineeRelation"]')
-    let options = () => {
-      for (let it of relSel.childNodes) {
-        if (it.value === "Brother") {
-          it.selected = "selected"
-          return it.getAttribute("value")
+    let nomineeRelation = '#AdditionalDetails form select[name="nomineeRelation"]'
+    await page.click(nomineeRelation)
+    let relOpt = await page.evaluate(() => {
+      let relSel = document.querySelector('#AdditionalDetails form select[name="nomineeRelation"]')
+      let options = () => {
+        for (let it of relSel.childNodes) {
+          if (it.value === "Brother") {
+            it.selected = "selected"
+            return it.getAttribute("value")
+          }
         }
       }
-    }
-    return options()
-  })
-  await page.select(nomineeRelation, relOpt)
+      return options()
+    })
+    await page.select(nomineeRelation, relOpt)
+  }
 
   let submitSel = "#previewPolicy"
   await page.waitForSelector(submitSel)

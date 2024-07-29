@@ -1,6 +1,6 @@
 import { waitForTimeout } from "../../utils/functions.js"
 
-export async function inspectionPage(page) {
+export async function inspectionPage(page, customerType) {
   await page.waitForSelector("#Inspection")
 
   let pngFile = "/Users/ankitparte/ActiveProject/testing-pup/src/suites-dp/files/tempSS.png"
