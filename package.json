@@ -6,15 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node src",
-    "test-insurance": "cd ./src/suites-dp/ && node createInsu new",
-    "test-insurance-1": "cd ./src/suites-dp/ && node createInsu new 1",
-    "test-insurance-2": "cd ./src/suites-dp/ && node createInsu new 2"
+    "test-policy": "cd ./src/suites/ && node run-policy.js",
+    "test-cert": "cd ./src/suites/ && node run-cert.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "puppeteer": "^22.13.0"
+    "puppeteer": "^22.13.0",
+    "shelljs": "^0.8.5"
   }
 }

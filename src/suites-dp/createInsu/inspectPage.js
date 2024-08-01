@@ -34,5 +34,5 @@ export async function inspectionPage(page, customerType) {
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
   await waitForTimeout(2000)
-  console.log("Inspection page done")
+  // console.log("Inspection page done")
 }

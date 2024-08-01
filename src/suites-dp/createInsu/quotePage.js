@@ -1,9 +1,12 @@
 import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
+import { loginPage } from "../globals/loginPage.js"
 
 export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
+  // console.log("quote page")
+
   if (isRenew) {
     let selRenewPol = "#newPolicy1false"
     await page.waitForSelector(selRenewPol)
@@ -14,10 +17,10 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
     await page.waitForSelector(selVehicleNum)
     await page.click(selVehicleNum)
     await page.type(selVehicleNum, randomNum)
-    await waitForTimeout(1000)
+    await waitForTimeout(1500)
     let expr = "#policyExpiry2Expired"
     // let expr
-    console.log("renewOpt -> ", renewOpt)
+    // console.log("renewOpt -> ", renewOpt)
     if (renewOpt == 1) {
       expr = 'input[value="Expired in last 90 days"]'
     } else if (renewOpt == 2) {
@@ -34,18 +37,26 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
       await page.click(claim)
     }
   }
+  // console.log("make")
   await page.waitForSelector("div#make")
   await page.click("div#make")
+  await waitForTimeout(500)
   await page.waitForSelector("#make .css-i97cuk-menu", { visible: true })
   await page.click("#make .css-i97cuk-menu")
+  await waitForTimeout(1000)
 
+  // console.log("model")
   await page.waitForSelector("div#model")
   await page.click("div#model")
+  await waitForTimeout(500)
   await page.waitForSelector("#model .css-i97cuk-menu", { visible: true })
   await page.click("#model .css-i97cuk-menu")
+  await waitForTimeout(1000)
 
+  // console.log("variant")
   await page.waitForSelector("div#variant")
   await page.click("div#variant")
+  await waitForTimeout(500)
   await page.waitForSelector("#variant .css-i97cuk-menu", { visible: true })
   await page.click("#variant .css-i97cuk-menu")
 
@@ -156,7 +167,7 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
       const selItem = document.querySelector(selector)
 
       for (const span of selItem.childNodes) {
-        if (span.getAttribute("class") === "flatpickr-day") {
+        if (span.getAttribute("class") === "flatpickr-day" || span.getAttribute("class") === "flatpickr-day today") {
           // console.log("span.arial-label -> ", span.getAttribute("aria-label"))
           return span.getAttribute("aria-label")
         }
@@ -172,7 +183,7 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   //   await page.waitForSelector('select[name="customerType"]', { visible: true })
   let customerTypeSel = 'select[name="customerType"]'
   await page.click('select[name="customerType"]')
-  console.log("customerType -> ", customerType)
+  // console.log("customerType -> ", customerType)
   await chooseOptViaSelector({ page, selector: customerTypeSel, optVal: `${customerType}` || "I" })
 
   //   await page.waitForSelector('input[name="pincode"]')
@@ -200,7 +211,7 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
     await new Promise((resolve) => setTimeout(resolve, 20000))
   }
 
-  let timeout = 30000
+  let timeout = 100000
   if (isRenew) {
     timeout = 100000
   }
@@ -210,5 +221,5 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   await page.waitForSelector(verifyKyc, { visible: true, timeout: timeout })
   await page.click(verifyKyc)
   await waitForTimeout(2000)
-  console.log("Quote Page Done")
+  // console.log("Quote Page Done")
 }
