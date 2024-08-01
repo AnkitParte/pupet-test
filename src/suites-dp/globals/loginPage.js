@@ -1,7 +1,7 @@
 export async function loginPage(page) {
   await page.waitForSelector("input#login-email")
   await page.click("input#login-email")
-  await page.type("input#login-email", "kise@test.com")
+  await page.type("input#login-email", "kisame@test.com")
 
   // await page.waitForSelector("input#login-password")
   // await page.click("input#login-password")

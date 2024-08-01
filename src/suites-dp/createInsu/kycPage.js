@@ -1,6 +1,6 @@
 import { chooseOptViaSelector, clearSelectorValue, customDateSelector, waitForTimeout } from "../../utils/functions.js"
 
-export async function kycPage({ page, isRenew, customerType = "I", companyType }) {
+export async function kycPage({ page, customerType = "I", companyType }) {
   await page.waitForSelector("#KYC")
   await waitForTimeout(1500)
   let gender = "#gender0Male"
@@ -76,7 +76,7 @@ export async function kycPage({ page, isRenew, customerType = "I", companyType }
 
   await waitForTimeout(1000)
   let firmTypeSel = 'select[name="companyType"]'
-  console.log("companyType ->", companyType)
+  // console.log("companyType ->", companyType)
   if (customerType == "C") {
     if (companyType == "proprietor" || companyType == "partnership") {
       await chooseOptViaSelector({ page, selector: firmTypeSel, optVal: companyType })
@@ -135,5 +135,5 @@ export async function kycPage({ page, isRenew, customerType = "I", companyType }
   await page.waitForSelector('#KYC form button[type="submit"]')
   await page.click('#KYC form button[type="submit"]')
   await waitForTimeout(2000)
-  console.log("Kyc Page Done")
+  // console.log("Kyc Page Done")
 }

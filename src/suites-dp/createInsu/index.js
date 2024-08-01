@@ -5,79 +5,87 @@ import { quotePage } from "./quotePage.js"
 import { loginPage } from "../globals/loginPage.js"
 import { policyPage } from "./policyPage.js"
 import { inspectionPage } from "./inspectPage.js"
+import { waitForTimeout } from "../../utils/functions.js"
 
-let args = process.argv.slice(2)
-;(async () => {
+export const createInsuTest = async (data) => {
+  let { vehicleType, renewOption, customerType: customerTypeId, companyType: companyTypeId, corporateTypeId, isHeadless } = data
+  let head = !isHeadless ? false : true
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    headless: false,
     executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
-    slowMo: 20
+    slowMo: 20,
+    headless: head
   })
+  // console.log("data -> ", data)
   const page = await browser.newPage()
-
-  console.log(FE_URL.Dev)
-  await page.goto(FE_URL.Dev)
-  //   await page.setViewport({ width: 1080, height: 900 })
-
-  //? login page
-  await loginPage(page)
-
-  let isRenew = args.length && args[0] === "renew" ? true : false
-  let renewOpt = args[1]
-  let customerType = "I"
-  let companyType = args[1]
-  // 1 "Expired in last 90 days"
-  // 2 "Expired for more than 90 days"
-  // else "Not expire"
-  if (isRenew) {
-    customerType = args[2] || "I"
-    companyType = args[3]
-    if (customerType != "I") {
-      if (companyType == 1) {
-        companyType = "proprietor"
-      } else if (companyType == 2) {
-        companyType = "partnership"
-      } else if (companyType == 3) {
-        companyType = "public"
-      } else if (companyType == 4) {
-        companyType = "private"
-      } else {
-        companyType = "proprietor"
-      }
+  try {
+    if (!head) {
+      console.log("Going Headless")
     }
-  } else {
-    customerType = renewOpt ? "C" : "I"
-    // 1 "proprietor"
-    // 2 "partnership"
-    // 3 "public"
-    // 4 "private"
-    if (companyType == 1) {
+    let sourceURL = FE_URL.Loc
+    // console.log(sourceURL)
+    await page.goto(sourceURL)
+    //   await page.setViewport({ width: 1080, height: 900 })
+
+    //? login page
+    await loginPage(page)
+
+    let isRenew = vehicleType == "renew" ? true : false
+    let companyType
+    let customerType = customerTypeId
+    let renewOpt = renewOption
+
+    if (corporateTypeId == 1) {
       companyType = "proprietor"
-    } else if (companyType == 2) {
+    } else if (corporateTypeId == 2) {
       companyType = "partnership"
-    } else if (companyType == 3) {
+    } else if (corporateTypeId == 3) {
       companyType = "public"
-    } else if (companyType == 4) {
+    } else if (corporateTypeId == 4) {
       companyType = "private"
     } else {
       companyType = "proprietor"
     }
-  }
-  //? quote page
-  await quotePage({ page, isRenew, renewOpt, customerType })
-  // return
-  if (isRenew && renewOpt != "none") {
-    await inspectionPage(page, customerType)
-  }
-  // return
-  //? kyc page
-  await kycPage({ page, isRenew, customerType, companyType })
-  // return
-  //? policy pages
-  await policyPage({ page, isRenew, renewOpt, customerType })
+    // 1 "Expired in last 90 days"
+    // 2 "Expired for more than 90 days"
+    // else "Not expire"
 
-  // await browser.close();
-})()
+    await waitForTimeout(1000)
+    let logOutBtnSel = "#LogoutNowBtn"
+    let isReLogin = await page.$(logOutBtnSel)
+    console.log("isReLogin", isReLogin)
+    if (isReLogin) {
+      //? login page
+      await page.waitForSelector(logOutBtnSel)
+      await page.click(logOutBtnSel)
+      await loginPage(page)
+    }
+
+    //? quote page
+    await quotePage({ page, isRenew, renewOpt, customerType })
+    // return
+    if (isRenew && renewOpt != "none") {
+      await inspectionPage(page, customerType)
+    }
+    // return
+    //? kyc page
+    await kycPage({ page, isRenew, customerType, companyType })
+    // return
+    //? policy pages
+    await policyPage({ page, isRenew, renewOpt, customerType })
+
+    await browser.close()
+    return {
+      status: true
+    }
+  } catch (e) {
+    await browser.close()
+    return {
+      status: false,
+      message: e?.message,
+      errorJson: JSON.stringify(e)
+    }
+  }
+}
