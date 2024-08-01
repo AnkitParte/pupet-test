@@ -8,8 +8,8 @@ import { inspectionPage } from "./inspectPage.js"
 import { waitForTimeout } from "../../utils/functions.js"
 
 export const createInsuTest = async (data) => {
-  let { vehicleType, renewOption, customerType: customerTypeId, companyType: companyTypeId, corporateTypeId, isHeadless } = data
-  let head = !isHeadless ? false : true
+  let { vehicleType, renewOption, customerType: customerTypeId, companyType: companyTypeId, corporateTypeId, headlessOff = false } = data
+  let head = headlessOff ? false : true
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     executablePath: "/opt/homebrew/bin/chromium",

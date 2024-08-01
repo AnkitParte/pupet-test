@@ -1,5 +1,7 @@
 import { createCertTest } from "../suites-dp/createCert/index.js"
+import { htmlOutput } from "../utils/outputHelper.js"
 import { certSuitesPayload, payloadNewCorp, payloadNewIndividual, payloadReNewCorp, payloadReNewIndividual } from "./suitePayload/certSuitePayload.js"
+import fs from "fs"
 
 const runTests = async (payload) => {
   const promises = payload.map(async (item, idx) => {
@@ -20,12 +22,22 @@ const runTests = async (payload) => {
   console.table(payload)
 }
 
-await runTests(certSuitesPayload)
+// await runTests(certSuitesPayload)
 
-// await runTests(payloadNewIndividual)
+let one = await runTests(payloadNewIndividual)
 
-// await runTests(payloadReNewIndividual)
+let two = await runTests(payloadReNewIndividual)
 
-// await runTests(payloadNewCorp)
+let three = await runTests(payloadNewCorp)
 
-// await runTests(payloadReNewCorp)
+let four = await runTests(payloadReNewCorp)
+
+let res = [...one, ...two, ...three, ...four]
+let htmlOut = htmlOutput("Policy Testing Report", res)
+let filePath = "newCertTestOut.html"
+fs.writeFile(filePath, htmlOut, (err) => {
+  if (err) {
+    return console.log(`Error writing file: ${err}`)
+  }
+  console.log(`File created successfully at ${filePath}`)
+})

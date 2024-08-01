@@ -1,3 +1,5 @@
+import { waitForTimeout } from "../../utils/functions.js"
+
 export async function loginPage(page) {
   await page.waitForSelector("input#login-email")
   await page.click("input#login-email")
@@ -20,4 +22,5 @@ export async function loginPage(page) {
   //pincodeState
   // Click the submit button
   await page.click('form button[type="submit"]')
+  await waitForTimeout(1000)
 }

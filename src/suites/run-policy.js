@@ -44,17 +44,18 @@ const runTests = async (payload) => {
 // await runTests(policySuitesPayload)
 
 let one = await runTests(payloadNewPolicy)
-// let two = await runTests(payloadReNewForI)
-// let three = await runTests(payloadReNewForNoExpiry)
-// let four = await runTests(payloadReNewForExpiringIn90)
-// let five = await runTests(payloadReNewForExpired90DaysAgo)
+let two = await runTests(payloadReNewForI)
+let three = await runTests(payloadReNewForNoExpiry)
+let four = await runTests(payloadReNewForExpiringIn90)
+let five = await runTests(payloadReNewForExpired90DaysAgo)
 
-// let res = [...one, ...two, ...three, ...four, ...five]
-// let htmlOut = htmlOutput("Policy Testing Report", res)
-// let filePath = "newPolicyTestOut.html"
-// fs.writeFile(filePath, htmlOut, (err) => {
-//   if (err) {
-//     return console.log(`Error writing file: ${err}`)
-//   }
-//   console.log(`File created successfully at ${filePath}`)
-// })
+let res = [...one, ...two, ...three, ...four, ...five]
+
+let htmlOut = htmlOutput("Policy Testing Report", res)
+let filePath = "newPolicyTestOut.html"
+fs.writeFile(filePath, htmlOut, (err) => {
+  if (err) {
+    return console.log(`Error writing file: ${err}`)
+  }
+  console.log(`File created successfully at ${filePath}`)
+})

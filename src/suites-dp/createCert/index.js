@@ -8,13 +8,13 @@ import { certPlanBox } from "./certPlanBox.js"
 import { waitForTimeout } from "../../utils/functions.js"
 
 export const createCertTest = async (data) => {
-  let { type, forId, planType: planTypeId, isHeadless } = data
-  let head = !isHeadless ? false : true
+  let { type, forId, planType: planTypeId, headlessOff = false } = data
+  let head = headlessOff ? false : true
   let isRenew = type == "renew" ? true : false
 
   let customerType = forId
   let planType = planTypeId
-  console.log("")
+  // console.log("")
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
