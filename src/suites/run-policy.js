@@ -1,4 +1,4 @@
-import { createInsuTest } from "../suites-dp/createInsu/index.js"
+import { createInsuTest } from "../tests/createInsu/index.js"
 import {
   payloadReNewForExpired90DaysAgo,
   payloadReNewForExpiringIn90,

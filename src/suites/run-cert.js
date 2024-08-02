@@ -1,4 +1,4 @@
-import { createCertTest } from "../suites-dp/createCert/index.js"
+import { createCertTest } from "../tests/createCert/index.js"
 import { htmlOutput, postToSlackChannel } from "../utils/outputHelper.js"
 import { certSuitesPayload, payloadNewCorp, payloadNewIndividual, payloadReNewCorp, payloadReNewIndividual } from "./suitePayload/certSuitePayload.js"
 import fs from "fs"

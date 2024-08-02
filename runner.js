@@ -1,5 +1,5 @@
-import { createCertTest } from "./src/suites-dp/createCert/index.js"
-import { createInsuTest } from "./src/suites-dp/createInsu/index.js"
+import { createCertTest } from "./src/tests/createCert/index.js"
+import { createInsuTest } from "./src/tests/createInsu/index.js"
 
 // await createInsuTest({
 //   id: 7,
