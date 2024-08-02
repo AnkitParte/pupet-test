@@ -1,13 +1,18 @@
+import { dealershipExecutive } from "../../loginCreds/index.js"
 import { waitForTimeout } from "../../utils/functions.js"
 
 export async function loginPage(page) {
+  let { email, password, usePassword } = dealershipExecutive
   await page.waitForSelector("input#login-email")
   await page.click("input#login-email")
-  await page.type("input#login-email", "kisame@test.com")
+  await page.type("input#login-email", email || "kisame@test.com")
 
-  // await page.waitForSelector("input#login-password")
-  // await page.click("input#login-password")
-  // await page.type("input#login-password", "kisame@test.com")
+  // console.log("userPassword", usePassword)
+  if (usePassword) {
+    await page.waitForSelector("input#login-password")
+    await page.click("input#login-password")
+    await page.type("input#login-password", password)
+  }
 
   //! in case if password is not auto-filled
   // await page.keyboard.down("Control") // or 'Command' on macOS
@@ -22,5 +27,5 @@ export async function loginPage(page) {
   //pincodeState
   // Click the submit button
   await page.click('form button[type="submit"]')
-  await waitForTimeout(1000)
+  await waitForTimeout(2000)
 }

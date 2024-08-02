@@ -24,7 +24,7 @@ export const createInsuTest = async (data) => {
     if (!head) {
       console.log("Going Headless")
     }
-    let sourceURL = FE_URL.Loc
+    let sourceURL = FE_URL.Dev
     // console.log(sourceURL)
     await page.goto(sourceURL)
     //   await page.setViewport({ width: 1080, height: 900 })
@@ -52,16 +52,17 @@ export const createInsuTest = async (data) => {
     // 2 "Expired for more than 90 days"
     // else "Not expire"
 
-    await waitForTimeout(1000)
+    //! code to tackle frontend bug
     let logOutBtnSel = "#LogoutNowBtn"
     let isReLogin = await page.$(logOutBtnSel)
-    console.log("isReLogin", isReLogin)
-    if (isReLogin) {
-      //? login page
-      await page.waitForSelector(logOutBtnSel)
-      await page.click(logOutBtnSel)
-      await loginPage(page)
-    }
+    // console.log("isReLogin", isReLogin)
+    // if (isReLogin) {
+    //? login page
+    await page.waitForSelector(logOutBtnSel)
+    await page.click(logOutBtnSel)
+    await loginPage(page)
+    // }
+    //! end
 
     //? quote page
     await quotePage({ page, isRenew, renewOpt, customerType })

@@ -1,5 +1,7 @@
 import { GetSecretValueCommand, SecretsManagerClient } from "@aws-sdk/client-secrets-manager"
 import axios from "axios"
+import dotenv from "dotenv"
+dotenv.config({ path: "../../.env" })
 
 const fetchSecret = async (secretName) => {
   try {
@@ -13,7 +15,7 @@ const fetchSecret = async (secretName) => {
 }
 
 const slackDetails = {
-  CHANNEL_ID: process.env.PORT,
+  CHANNEL_ID: process.env.SLACK_CHANNEL_ID,
   URL: "https://slack.com/api/"
 }
 export const sendSlackMessage = async (message) => {
@@ -32,14 +34,14 @@ export const sendSlackMessage = async (message) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `\`\`\`${message?.testSuiteName}: ${JSON.stringify(message, null, 2)}\n\`\`\``
+          text: `\`\`\`${JSON.stringify(message, null, 2)}\n\`\`\``
         }
       }
     ]
   }
   let res
   const url = `${slackDetails.URL}chat.postMessage`
-  console.info({ url })
+  // console.info({ url })
   const { token } = await fetchSecret("slack-bearertoken")
   const headers = {
     Authorization: token,

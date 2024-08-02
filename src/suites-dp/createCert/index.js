@@ -33,16 +33,17 @@ export const createCertTest = async (data) => {
     //? login page
     await loginPage(page)
 
-    await waitForTimeout(1000)
+    //! Code to tackle frontend bug
     let logOutBtnSel = "#LogoutNowBtn"
     let isReLogin = await page.$(logOutBtnSel)
-    console.log("isReLogin", isReLogin)
-    if (isReLogin) {
-      //? login page
-      await page.waitForSelector(logOutBtnSel)
-      await page.click(logOutBtnSel)
-      await loginPage(page)
-    }
+    // console.log("isReLogin", isReLogin)
+    // if (isReLogin) {
+    //? login page
+    await page.waitForSelector(logOutBtnSel)
+    await page.click(logOutBtnSel)
+    await loginPage(page)
+    // }
+    //! end
 
     await waitForTimeout(500)
     let newCert = '#root li a[href="/policies/certificates"]'

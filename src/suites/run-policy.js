@@ -1,5 +1,4 @@
 import { createInsuTest } from "../suites-dp/createInsu/index.js"
-import { htmlOutput } from "../utils/outputHelper.js"
 import {
   payloadReNewForExpired90DaysAgo,
   payloadReNewForExpiringIn90,
@@ -9,6 +8,9 @@ import {
   payloadNewPolicy
 } from "./suitePayload/policySuitePayload.js"
 import fs from "fs"
+import dotenv from "dotenv"
+import { postToSlackChannel } from "../utils/outputHelper.js"
+dotenv.config({ path: "../../.env" })
 
 const runTests = async (payload) => {
   const promises = payload.map(async (item, idx) => {
@@ -51,11 +53,9 @@ let five = await runTests(payloadReNewForExpired90DaysAgo)
 
 let res = [...one, ...two, ...three, ...four, ...five]
 
-let htmlOut = htmlOutput("Policy Testing Report", res)
-let filePath = "newPolicyTestOut.html"
-fs.writeFile(filePath, htmlOut, (err) => {
-  if (err) {
-    return console.log(`Error writing file: ${err}`)
-  }
-  console.log(`File created successfully at ${filePath}`)
-})
+if (process.env.DO_SLACK == "true") {
+  console.log("Doing Slack")
+  let suiteName = "Create-Policy"
+  let suiteTitle = "Policy-All-Types-Testing"
+  await postToSlackChannel(res, suiteName, suiteTitle)
+}
