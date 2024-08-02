@@ -8,8 +8,8 @@ import {
   payloadNewPolicy
 } from "./suitePayload/policySuitePayload.js"
 import fs from "fs"
+import { postToSlackChannel } from "../utils/postToSlack.js"
 import dotenv from "dotenv"
-import { postToSlackChannel } from "../utils/outputHelper.js"
 dotenv.config({ path: "../../.env" })
 
 const runTests = async (payload) => {

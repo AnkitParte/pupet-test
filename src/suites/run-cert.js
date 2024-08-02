@@ -1,5 +1,6 @@
 import { createCertTest } from "../tests/createCert/index.js"
-import { htmlOutput, postToSlackChannel } from "../utils/outputHelper.js"
+import { htmlOutput } from "../utils/outputHelper.js"
+import { postToSlackChannel } from "../utils/postToSlack.js"
 import { certSuitesPayload, payloadNewCorp, payloadNewIndividual, payloadReNewCorp, payloadReNewIndividual } from "./suitePayload/certSuitePayload.js"
 import fs from "fs"
 import dotenv from "dotenv"
