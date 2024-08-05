@@ -25,10 +25,10 @@ export const policyEndorse = async () => {
     //   await page.setViewport({ width: 1080, height: 900 })
 
     //? login page
-    // await loginPage(page)
+    await loginPage(page)
 
     //? request a policy endorsement
-    // await requestPolicyEndorse({ page })
+    await requestPolicyEndorse({ page })
 
     //? approve a policy endorsement
     const adminPage = await browser.newPage()
