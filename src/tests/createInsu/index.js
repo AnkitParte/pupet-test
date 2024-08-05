@@ -22,7 +22,7 @@ export const createInsuTest = async (data) => {
   const page = await browser.newPage()
   try {
     if (!head) {
-      console.log("Going Headless")
+      console.log("Going Head full")
     }
     let sourceURL = FE_URL.Dev
     // console.log(sourceURL)
@@ -53,14 +53,14 @@ export const createInsuTest = async (data) => {
     // else "Not expire"
 
     //! code to tackle frontend bug
-    let logOutBtnSel = "#LogoutNowBtn"
-    let isReLogin = await page.$(logOutBtnSel)
-    // console.log("isReLogin", isReLogin)
+    // let logOutBtnSel = "#LogoutNowBtn"
+    // let isReLogin = await page.$(logOutBtnSel)
+    // // console.log("isReLogin", isReLogin)
     // if (isReLogin) {
-    //? login page
-    await page.waitForSelector(logOutBtnSel)
-    await page.click(logOutBtnSel)
-    await loginPage(page)
+    //   //? login page
+    //   await page.waitForSelector(logOutBtnSel)
+    //   await page.click(logOutBtnSel)
+    //   await loginPage(page)
     // }
     //! end
 

@@ -1,10 +1,11 @@
 import puppeteer from "puppeteer"
-import { FE_URL, testPdf } from "../../utils/constants.js"
+import { FE_URL } from "../../utils/constants.js"
 import { loginPage } from "../globals/loginPage.js"
-import { chooseOptViaSelector } from "../../utils/functions.js"
+import { requestCancel } from "./requestPolicyCancel.js"
+import { approvePolicyCancel } from "./approvePolicyCancel.js"
 
 // let args = process.argv.slice(2)
-;(async () => {
+export const policyCancel = async () => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: false,
@@ -13,50 +14,37 @@ import { chooseOptViaSelector } from "../../utils/functions.js"
     ignoreHTTPSErrors: true,
     slowMo: 20
   })
-  const page = await browser.newPage()
+  try {
+    const page = await browser.newPage()
 
-  console.log(FE_URL.Loc)
-  await page.goto(FE_URL.Loc)
-  //   await page.setViewport({ width: 1080, height: 900 })
+    let sourceURL = FE_URL.Loc
+    let adminSourceURL = FE_URL.adminLoc
+    console.log(sourceURL)
+    await page.goto(sourceURL)
+    //   await page.setViewport({ width: 1080, height: 900 })
 
-  //? login page
-  await loginPage(page)
+    //? login page
+    await loginPage(page)
 
-  let insuHist = '#root li a[href="/policies/my-insurance"]'
-  await page.waitForSelector("#root div div")
-  await page.waitForSelector(insuHist)
-  await page.click(insuHist)
+    //? request a policy cancellation
+    await requestCancel({ page })
 
-  let filterDd = 'select[name="statusFilter"]'
+    //? approve a policy cancellation
+    const adminPage = await browser.newPage()
+    await adminPage.goto(adminSourceURL)
+    await approvePolicyCancel({ page: adminPage })
 
-  await page.waitForSelector(filterDd)
-  await chooseOptViaSelector({ page, selector: filterDd, optVal: "Active" })
-
-  await page.waitForSelector("tbody")
-
-  await page.waitForSelector("tbody tr:nth-of-type(1)")
-  await page.waitForSelector('tbody tr:nth-of-type(1) td div[class="dropdown"]')
-  await page.click('tbody tr:nth-of-type(1) td div[class="dropdown"]')
-
-  await page.waitForSelector('tbody tr:nth-of-type(1) td div div a[role="menuitem"]')
-  await page.click("tbody tr:nth-of-type(1) td div div #cancelPolicy")
-
-  // body > div:nth-child(7) > div > div.modal.fade.show
-  // /html/body/div[3]/div/div[1]
-
-  let cancelReasonDd = 'select[name="cancelReason"]'
-  await chooseOptViaSelector({ page, selector: cancelReasonDd })
-
-  let proofOne = 'input[name="proofFile1"]'
-  let invoiceCopy = await page.waitForSelector(proofOne)
-  await invoiceCopy.uploadFile(testPdf)
-
-  let proofTwo = 'input[name="proofFile2"]'
-  let dealerDecl = await page.waitForSelector(proofTwo)
-  await dealerDecl.uploadFile(testPdf)
-
-  let submitSel = "#requestCancelPolicyBtn"
-  await page.waitForSelector(submitSel)
-  await page.click(submitSel)
-  // await browser.close();
-})()
+    // await browser.close()
+    return {
+      status: true
+    }
+  } catch (e) {
+    // await browser.close()
+    console.log("error", e)
+    return {
+      status: false,
+      message: e?.message,
+      errorJson: JSON.stringify(e)
+    }
+  }
+}

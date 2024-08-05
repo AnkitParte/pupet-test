@@ -25,6 +25,9 @@ export const createCertTest = async (data) => {
     headless: head
   })
   try {
+    if (!head) {
+      console.log("Going Head full")
+    }
     const page = await browser.newPage()
     let sourceURL = FE_URL.Loc
     // console.log(sourceURL)
@@ -34,14 +37,14 @@ export const createCertTest = async (data) => {
     await loginPage(page)
 
     //! Code to tackle frontend bug
-    let logOutBtnSel = "#LogoutNowBtn"
-    let isReLogin = await page.$(logOutBtnSel)
-    // console.log("isReLogin", isReLogin)
+    // let logOutBtnSel = "#LogoutNowBtn"
+    // let isReLogin = await page.$(logOutBtnSel)
+    // // console.log("isReLogin", isReLogin)
     // if (isReLogin) {
-    //? login page
-    await page.waitForSelector(logOutBtnSel)
-    await page.click(logOutBtnSel)
-    await loginPage(page)
+    // //? login page
+    // await page.waitForSelector(logOutBtnSel)
+    // await page.click(logOutBtnSel)
+    // await loginPage(page)
     // }
     //! end
 
