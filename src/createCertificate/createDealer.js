@@ -30,11 +30,15 @@ function generateRandomEmail(baseEmail, domain) {
   })
 
   // Clear and type the email address
-  await page.evaluate(() => (document.querySelector('input[type="email"]').value = ""))
+  await page.evaluate(
+    () => (document.querySelector('input[type="email"]').value = "")
+  )
   await page.type('input[type="email"]', "arpita@aegiscovenant.com")
 
   // Clear and type the password
-  await page.evaluate(() => (document.querySelector('input[type="password"]').value = ""))
+  await page.evaluate(
+    () => (document.querySelector('input[type="password"]').value = "")
+  )
   await page.type('input[type="password"]', "Arpita828!")
 
   // Wait for the "Sign in" button to be visible
@@ -58,13 +62,13 @@ function generateRandomEmail(baseEmail, domain) {
     // Fill name
     await page.waitForSelector('input[name="name"]')
     await page.click('input[name="name"]')
-    await page.type('input[name="name"]', " Test Master Dealer ")
+    await page.type('input[name="name"]', "Master Dealer")
     console.log("Name Added Successfully!")
 
     // Fill Legal Name
     await page.waitForSelector('input[name="legalName"]')
     await page.click('input[name="legalName"]')
-    await page.type('input[name="legalName"]', "Test Master Dealer")
+    await page.type('input[name="legalName"]', "Master Dealer")
     console.log("Legal Name Added Successfully!")
 
     // Fill Email
@@ -73,7 +77,10 @@ function generateRandomEmail(baseEmail, domain) {
     //await page.type('input[name="email"]', "masterdealer@test.com")
     //console.log("Email Added Successfully!")
 
-    const randomDealerEmail = generateRandomEmail("masterdealer@test.com", "test.com")
+    const randomDealerEmail = generateRandomEmail(
+      "masterdealer@test.com",
+      "test.com"
+    )
 
     // Dealer email
     await page.waitForSelector('input[name="email"]')
@@ -95,7 +102,9 @@ function generateRandomEmail(baseEmail, domain) {
     //   waitForTimeout(100)
 
     let distributorIdOpt = await page.evaluate(() => {
-      const distributorId = document.querySelector('select[name="distributorId"]')
+      const distributorId = document.querySelector(
+        'select[name="distributorId"]'
+      )
       console.log("distributorId dom", distributorId)
       let options = () => {
         for (const option of distributorId.childNodes) {
@@ -158,19 +167,24 @@ function generateRandomEmail(baseEmail, domain) {
   await page.waitForSelector('select[name="services"]', { visible: true })
   await page.click('select[name="services"]')
 
-  let servicesOpt = await page.evaluate(() => {
+  // Certificate
+  // Policy
+  // Certificate+Policy
+  // Pvt Car
+  let optVal = "Certificate+Policy"
+  let servicesOpt = await page.evaluate((customOpt) => {
     const variant = document.querySelector('select[name="services"]')
     let options = () => {
       for (const option of variant.childNodes) {
         console.log("option", option)
-        if (option.value) {
+        if (option.value == customOpt) {
           option.selected = "selected"
           return option.getAttribute("value")
         }
       }
     }
     return options()
-  })
+  }, optVal)
   await page.select('select[name="services"]', servicesOpt)
   console.log("Dealership Services selected !")
 
@@ -197,7 +211,10 @@ function generateRandomEmail(baseEmail, domain) {
   //)
   //console.log("Owner Email Added Successfully!")
 
-  const randomOwnerEmail = generateRandomEmail("masterdealerowner@test.com", "test.com")
+  const randomOwnerEmail = generateRandomEmail(
+    "masterdealerowner@test.com",
+    "test.com"
+  )
   // Owner email
   await page.waitForSelector('input[name="ownerEmail"]')
   await page.click('input[name="ownerEmail"]')
@@ -215,6 +232,7 @@ function generateRandomEmail(baseEmail, domain) {
   await page.click('button[type="submit"]')
   console.log("Next BUtton Clicked successfully!")
 
+  // Click ok button
   const ok = "/html/body/div[2]/div/div[3]/button[1]"
   const okelement = await page.waitForSelector(`xpath/${ok}`)
   await okelement.click()
@@ -228,21 +246,30 @@ function generateRandomEmail(baseEmail, domain) {
 
   // pan uploaded
 
-  let fileToUploadPAN = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/pan.png"
+  let fileToUploadPAN =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/pan.png"
 
+  await waitForTimeout(1000)
   const uploadPAN = await page.waitForSelector("#panDs")
+  await waitForTimeout(1000)
   await uploadPAN.uploadFile(fileToUploadPAN)
   console.log("PAN uploaded successfully!")
 
-  let fileToUploadCancelledCheck = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+  let fileToUploadCancelledCheck =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
 
+  await waitForTimeout(1000)
   const cancelledCheck = await page.waitForSelector("#cancelledChequeDs")
+  await waitForTimeout(1000)
   await cancelledCheck.uploadFile(fileToUploadCancelledCheck)
   console.log("Cancelled Check uploaded successfully!")
 
-  let fileToUploadGSTDocs = "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
+  let fileToUploadGSTDocs =
+    "/Users/arpitapandey/OfficeProjects/pupet-test/src/fileholder/sampleJpg.jpeg"
 
+  await waitForTimeout(1000)
   const GSTDocs = await page.waitForSelector("#gstDs")
+  await waitForTimeout(1000)
   await GSTDocs.uploadFile(fileToUploadGSTDocs)
   console.log("Cancelled Check uploaded successfully!")
 
@@ -256,15 +283,33 @@ function generateRandomEmail(baseEmail, domain) {
   await page.click(".css-10wo9uf-option")
   await page.click(".css-10wo9uf-option")
 
-  await page.waitForSelector(".css-hlgwow")
-  await page.click(".css-hlgwow")
+  await page.evaluate(() => {
+    document.activeElement.blur()
+  })
 
-  await page.waitForSelector(".css-19bb58m")
-  await page.click(".css-19bb58m")
+  await page.waitForSelector('button[type="submit"]', { visible: true })
+  await page.click('button[type="submit"]')
+  console.log("Form submitted successfully!")
+  await waitForTimeout(5000)
+
+  // Wait for the Top-Up element using XPath
+  // const submitButton =
+  //   '  "//*[@id="root"]/div[1]/div[2]/div[3]/div/div/div/form/div[4]/div/div/button"'
+  // const submitButtonElement = await page.waitForSelector(
+  //   `xpath/${submitButton}`
+  // )
+  // await submitButtonElement.click()
+  // console.log("Dealership Created !")
+
+  //await page.waitForSelector(".css-hlgwow")
+  //await page.click(".css-hlgwow")
+
+  //await page.waitForSelector(".css-19bb58m")
+  //await page.click(".css-19bb58m")
 
   // Add a delay to allow for any post-login processes
-  await new Promise((resolve) => setTimeout(resolve, 5000))
+  //await new Promise((resolve) => setTimeout(resolve, 5000))
 
   // await browser.close()
-  //console.log("Browser closed")
+  console.log("Browser closed")
 })()

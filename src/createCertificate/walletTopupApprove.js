@@ -79,6 +79,7 @@ import { waitForTimeout } from "../utils/functions.js"
     const uploadButton = await page.$("#proofFile")
     uploadButton.uploadFile(fileToUpload)
     console.log("Transaction Proof uploaded successfully!")
+
     // select payment mode
     await page.waitForSelector('select[name="paymentMode"]', { visible: true })
     await page.click('select[name="paymentMode"]')
