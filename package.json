@@ -5,13 +5,20 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node src"
+    "dev": "node src",
+    "test-policy": "cd ./src/suites/ && node run-policy.js",
+    "test-cert": "cd ./src/suites/ && node run-cert.js",
+    "test-policy-2": "cd ./src/suites/ && node test-policy.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.621.0",
+    "@aws-sdk/client-secrets-manager": "^3.621.0",
+    "axios": "^1.7.3",
+    "dotenv": "^16.4.5",
     "puppeteer": "^22.13.0"
   }
 }

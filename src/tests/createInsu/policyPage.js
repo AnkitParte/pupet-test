@@ -156,10 +156,10 @@ export async function policyPage({ page, isRenew, renewOpt, customerType }) {
   let submitSel = "#previewPolicy"
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
-
+  // return
   let createPolicySel = "#createPolicy"
   await page.waitForSelector(createPolicySel)
   await page.click(createPolicySel)
 
-  console.log("Policy Page Done")
+  // console.log("Policy Page Done")
 }

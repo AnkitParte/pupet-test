@@ -8,7 +8,19 @@
 </ul>
 
 <p>Do cd src then do cd suites-ap then run the CLI commands to test create insurance</p>
-<p>While testing whenever creating or renewing a policy one should have to change Registration number(in quotePage.js) and chassis number(in policyPage.js) otherwise test case will going to fail</p>
+<p>While testing whenever creating or renewing a policy there are two main reason due to which policy creation and renewal can be fail. First is due to wrong registration number and second is due to the chassis number whose policy already existing in DB</p>
+<p>If a test case fail, do restart the test case</p>
+
+<p>Steps to follow to run below test cases</p>
+<ul>
+<li> <code>npm install</code> </li>
+<li><code>cd src</code></li>
+<li><code>cd suites-ap</code></li>
+<li>In index.js of createInsu, there is requirement of chromium path on your device if don't have chromium then comment down this line
+<code>executablePath: "/opt/homebrew/bin/chromium"</code>
+</li>
+<li>then run the CLI commands</li>
+</ul>
 
 | S.No. | Test Case                                | Description                                             | CLI command                      | Status |
 | :---- | :--------------------------------------- | :------------------------------------------------------ | :------------------------------- | :----- |

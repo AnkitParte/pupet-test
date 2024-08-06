@@ -1,29 +1,10 @@
-import puppeteer from "puppeteer"
-import { FE_URL, testPdf } from "../../utils/constants.js"
-import { loginPage } from "../globals/loginPage.js"
-import { chooseOptViaSelector } from "../../utils/functions.js"
+import { testPdf } from "../../utils/constants.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
 
-// let args = process.argv.slice(2)
-;(async () => {
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    headless: false,
-    executablePath: "/opt/homebrew/bin/chromium",
-    defaultViewport: null,
-    ignoreHTTPSErrors: true,
-    slowMo: 20
-  })
-  const page = await browser.newPage()
-
-  console.log(FE_URL.Loc)
-  await page.goto(FE_URL.Loc)
-  //   await page.setViewport({ width: 1080, height: 900 })
-
-  //? login page
-  await loginPage(page)
-
+export const requestCancel = async ({ page }) => {
   let insuHist = '#root li a[href="/policies/my-insurance"]'
   await page.waitForSelector("#root div div")
+  await waitForTimeout(1000)
   await page.waitForSelector(insuHist)
   await page.click(insuHist)
 
@@ -50,13 +31,20 @@ import { chooseOptViaSelector } from "../../utils/functions.js"
   let proofOne = 'input[name="proofFile1"]'
   let invoiceCopy = await page.waitForSelector(proofOne)
   await invoiceCopy.uploadFile(testPdf)
+  await waitForTimeout(1500)
 
   let proofTwo = 'input[name="proofFile2"]'
   let dealerDecl = await page.waitForSelector(proofTwo)
   await dealerDecl.uploadFile(testPdf)
+  await waitForTimeout(1500)
 
   let submitSel = "#requestCancelPolicyBtn"
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
-  // await browser.close();
-})()
+
+  await page.waitForSelector("#successToast", { timeout: 50000 })
+  let checkIfSucceed = await page.$("#successToast")
+  if (!checkIfSucceed) {
+    throw new Error("Failed to request policy cancellation")
+  }
+}

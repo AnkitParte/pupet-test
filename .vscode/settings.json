@@ -1,15 +1,7 @@
 {
   "prettier.semi": false,
   "prettier.trailingComma": "none",
-  "cSpell.words": [
-    "acpl",
-    "insu",
-    "Insu",
-    "lightgray",
-    "oems",
-    "pincode",
-    "topup"
-  ],
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "cSpell.words": ["acpl", "bajaj", "icici", "insu", "Insu", "lightgray", "oems", "pincode", "shri", "Shri", "tata", "Tobirama", "topup"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

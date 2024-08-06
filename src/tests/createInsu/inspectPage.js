@@ -1,10 +1,8 @@
 import { waitForTimeout } from "../../utils/functions.js"
+import { jpgFile, pngFile } from "../../utils/constants.js"
 
 export async function inspectionPage(page, customerType) {
   await page.waitForSelector("#Inspection")
-
-  let pngFile = "/Users/ankitparte/ActiveProject/testing-pup/src/suites-dp/files/tempSS.png"
-  let jpgFile = "/Users/ankitparte/ActiveProject/testing-pup/src/suites-dp/files/tree.jpeg"
 
   let front = await page.waitForSelector('input[name="front"]')
   await front.uploadFile(pngFile)
@@ -34,5 +32,5 @@ export async function inspectionPage(page, customerType) {
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
   await waitForTimeout(2000)
-  console.log("Inspection page done")
+  // console.log("Inspection page done")
 }
