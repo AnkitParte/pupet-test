@@ -5,12 +5,12 @@ export const uploadToS3 = async (htmlData, dirName, title) => {
     const awsClient = new S3Client({ region: "ap-south-1" })
     const date = new Date().toISOString().slice(0, 10)
     const params = {
-      Bucket: "acpl-core",
-      Key: `policy-testing-report/frontend-reports/${dirName}/${title}-${date}.html`,
+      Bucket: "policy-testing-report",
+      Key: `frontend-reports/${dirName}/${title}-${date}.html`,
       Body: htmlData,
       ContentType: "text/html"
     }
-    const reportLink = `https://acpl-core.s3.ap-south-1.amazonaws.com/policy-testing-report/frontend-reports/${dirName}/${title}-${date}.html`
+    const reportLink = `https://policy-testing-report.s3.ap-south-1.amazonaws.com/frontend-reports/${dirName}/${title}-${date}.html`
     const response = await awsClient.send(new PutObjectCommand(params))
     console.log("Success in S3 upload")
     return reportLink

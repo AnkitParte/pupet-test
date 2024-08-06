@@ -1,5 +1,5 @@
-import { opsAdmin } from "../../loginCreds/index.js"
-import { clearSelectorValue, waitForTimeout } from "../../utils/functions.js"
+import { opsAdmin } from "../loginCreds/index.js"
+import { clearSelectorValue, waitForTimeout } from "../utils/functions.js"
 
 export async function adminLoginPage(page) {
   let { email, password, usePassword } = opsAdmin

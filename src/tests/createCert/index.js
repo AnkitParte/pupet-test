@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer"
 import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../globals/loginPage.js"
+import { loginPage } from "../../globals/loginPage.js"
 import { basicDetails } from "./basicDetails.js"
 import { vehicleDetails } from "./vehicleDetails.js"
 import { nomineeDetails } from "./nomineeDetails.js"

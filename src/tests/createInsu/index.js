@@ -2,20 +2,29 @@ import puppeteer from "puppeteer"
 import { FE_URL } from "../../utils/constants.js"
 import { kycPage } from "./kycPage.js"
 import { quotePage } from "./quotePage.js"
-import { loginPage } from "../globals/loginPage.js"
+import { loginPage } from "../../globals/loginPage.js"
 import { policyPage } from "./policyPage.js"
 import { inspectionPage } from "./inspectPage.js"
 import { waitForTimeout } from "../../utils/functions.js"
 
 export const createInsuTest = async (data) => {
-  let { vehicleType, renewOption, customerType: customerTypeId, companyType: companyTypeId, corporateTypeId, headlessOff = false } = data
+  let {
+    vehicleType,
+    renewOption,
+    customerType: customerTypeId,
+    companyType: companyTypeId,
+    corporateTypeId,
+    headlessOff = false,
+    bikeDetails,
+    insurer
+  } = data
   let head = headlessOff ? false : true
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
-    slowMo: 20,
+    slowMo: 40,
     headless: head
   })
   // console.log("data -> ", data)
@@ -24,7 +33,7 @@ export const createInsuTest = async (data) => {
     if (!head) {
       console.log("Going Head full")
     }
-    let sourceURL = FE_URL.Dev
+    let sourceURL = FE_URL.Loc
     // console.log(sourceURL)
     await page.goto(sourceURL)
     //   await page.setViewport({ width: 1080, height: 900 })
@@ -65,24 +74,24 @@ export const createInsuTest = async (data) => {
     //! end
 
     //? quote page
-    await quotePage({ page, isRenew, renewOpt, customerType })
+    await quotePage({ page, isRenew, renewOpt, customerType, bikeDetails })
     // return
     if (isRenew && renewOpt != "none") {
       await inspectionPage(page, customerType)
     }
     // return
     //? kyc page
-    await kycPage({ page, isRenew, customerType, companyType })
+    await kycPage({ page, isRenew, customerType, companyType, insurer })
     // return
     //? policy pages
     await policyPage({ page, isRenew, renewOpt, customerType })
 
-    await browser.close()
+    // await browser.close()
     return {
       status: true
     }
   } catch (e) {
-    await browser.close()
+    // await browser.close()
     return {
       status: false,
       message: e?.message,

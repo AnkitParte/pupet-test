@@ -1,13 +1,14 @@
 import { dealershipExecutive } from "../../loginCreds/index.js"
 import { testPdf } from "../../utils/constants.js"
 import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
-import { adminLoginPage } from "../globals/adminLoginPage.js"
+import { adminLoginPage } from "../../globals/adminLoginPage.js"
 
 export const approvePolicyEndorse = async ({ page }) => {
   await adminLoginPage(page)
 
   let insuEndorseHist = '#root li a[href="/endorsement"]'
   await page.waitForSelector("#root div div")
+  await waitForTimeout(1000)
   await page.waitForSelector(insuEndorseHist)
   await page.click(insuEndorseHist)
 

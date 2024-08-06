@@ -1,3 +1,5 @@
+import { BAJAJ, ICICI, SHRI_RAM, TATA, UNITED } from "../../utils/constants.js"
+
 export let payloadNewPolicy = [
   {
     id: 1,
@@ -238,4 +240,107 @@ export let policySuitesPayload = [
   ...payloadReNewForNoExpiry,
   ...payloadReNewForExpiringIn90,
   ...payloadReNewForExpired90DaysAgo
+]
+
+export let mixedPolicySuitesPayload = [
+  {
+    id: 1,
+    vehicleType: "new",
+    forCustomer: "Individual",
+    customerType: "I",
+    corporateType: "",
+    corporateTypeId: "",
+    title: "New policy for Individual",
+    renewOption: "none",
+    status: "😢Pending",
+    insurer: UNITED,
+    bikeDetails: {
+      make: "hero motocorp",
+      model: "destini",
+      rto: "hr26",
+      pincode: "122005",
+      idv: "84500"
+    },
+    headlessOff: false
+  },
+  {
+    id: 3,
+    vehicleType: "new",
+    forCustomer: "Corporate",
+    customerType: "C",
+    corporateType: "Partnership",
+    corporateTypeId: "2",
+    title: "New policy for Corporate-Partnership",
+    renewOption: "none",
+    status: "😢Pending",
+    insurer: SHRI_RAM,
+    bikeDetails: {
+      make: "honda",
+      model: "activa",
+      rto: "ka44",
+      pincode: "572218",
+      idv: "85600"
+    },
+    headlessOff: false
+  },
+  {
+    id: 4,
+    vehicleType: "new",
+    forCustomer: "Corporate",
+    customerType: "C",
+    corporateType: "Public",
+    corporateTypeId: "3",
+    title: "New policy for Corporate-Public",
+    renewOption: "none",
+    status: "😢Pending",
+    insurer: TATA,
+    bikeDetails: {
+      make: "suzuki",
+      model: "access",
+      rto: "od25",
+      pincode: "761118",
+      idv: "82824"
+    },
+    headlessOff: false
+  },
+  {
+    id: 5,
+    vehicleType: "new",
+    forCustomer: "Corporate",
+    customerType: "C",
+    corporateType: "Private",
+    corporateTypeId: "4",
+    title: "New policy for Corporate-Private",
+    renewOption: "none",
+    status: "😢Pending",
+    insurer: ICICI,
+    bikeDetails: {
+      make: "yamaha",
+      model: "fascino",
+      rto: "up11",
+      pincode: "247001",
+      idv: "76876"
+    },
+    headlessOff: false
+  },
+  {
+    id: 2,
+    vehicleType: "new",
+    forCustomer: "Corporate",
+    customerType: "C",
+    corporateType: "Proprietor",
+    corporateTypeId: "1",
+    title: "New policy for Corporate-Proprietor",
+    renewOption: "none",
+    status: "😢Pending",
+    insurer: BAJAJ,
+    bikeDetails: {
+      make: "hero motocorp",
+      model: "destini",
+      rto: "gj19",
+      pincode: "395620",
+      idv: "74195"
+    },
+    headlessOff: false
+  }
 ]

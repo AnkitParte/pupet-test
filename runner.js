@@ -1,7 +1,9 @@
 import { createCertTest } from "./src/tests/createCert/index.js"
 import { createInsuTest } from "./src/tests/createInsu/index.js"
+import { changeConfigInsurer, loginAdminApiCall } from "./src/globals/api/adminPanelApi.js"
 import { policyCancel } from "./src/tests/policyCancel/index.js"
 import { policyEndorse } from "./src/tests/policyEndorse/index.js"
+import { accessTokenFE } from "./src/utils/constants.js"
 
 let insuPayload = {
   id: 7,
@@ -37,4 +39,11 @@ let insuPayload = {
 
 // await policyCancel()
 
-await policyEndorse()
+// await policyEndorse()
+
+let login = await loginAdminApiCall()
+if (login?.status == 200) {
+  let { accessToken } = login
+
+  await changeConfigInsurer({ accessToken, insurer: "BAJAJ" })
+}

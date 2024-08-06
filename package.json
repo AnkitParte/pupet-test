@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node src",
     "test-policy": "cd ./src/suites/ && node run-policy.js",
-    "test-cert": "cd ./src/suites/ && node run-cert.js"
+    "test-cert": "cd ./src/suites/ && node run-cert.js",
+    "test-policy-2": "cd ./src/suites/ && node test-policy.js"
   },
   "keywords": [],
   "author": "",

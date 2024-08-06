@@ -4,6 +4,7 @@ import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
 export const requestCancel = async ({ page }) => {
   let insuHist = '#root li a[href="/policies/my-insurance"]'
   await page.waitForSelector("#root div div")
+  await waitForTimeout(1000)
   await page.waitForSelector(insuHist)
   await page.click(insuHist)
 

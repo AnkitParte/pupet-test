@@ -1,17 +1,18 @@
 import puppeteer from "puppeteer"
 import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../globals/loginPage.js"
+import { loginPage } from "../../globals/loginPage.js"
 import { requestPolicyEndorse } from "./requestPolicyEndorse.js"
 import { approvePolicyEndorse } from "./approvePolicyEndorse.js"
 
-export const policyEndorse = async () => {
+export const policyEndorse = async (data) => {
+  let { headless = false } = data
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    headless: false,
+    headless: headless,
     executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
-    slowMo: 20
+    slowMo: 30
   })
 
   try {
@@ -35,9 +36,12 @@ export const policyEndorse = async () => {
     await adminPage.goto(adminSourceURL)
     await approvePolicyEndorse({ page: adminPage })
 
-    // await browser.close();
+    await browser.close()
+    return {
+      status: true
+    }
   } catch (e) {
-    // await browser.close()
+    await browser.close()
     console.log("error", e)
     return {
       status: false,

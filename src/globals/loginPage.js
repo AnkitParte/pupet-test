@@ -1,5 +1,5 @@
-import { dealershipExecutive } from "../../loginCreds/index.js"
-import { waitForTimeout } from "../../utils/functions.js"
+import { dealershipExecutive } from "../loginCreds/index.js"
+import { waitForTimeout } from "../utils/functions.js"
 
 export async function loginPage(page) {
   let { email, password, usePassword } = dealershipExecutive

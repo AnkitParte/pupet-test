@@ -5,7 +5,8 @@ import {
   payloadReNewForI,
   payloadReNewForNoExpiry,
   policySuitesPayload,
-  payloadNewPolicy
+  payloadNewPolicy,
+  mixedPolicySuitesPayload
 } from "./suitePayload/policySuitePayload.js"
 import fs from "fs"
 import { postToSlackChannel } from "../utils/postToSlack.js"
@@ -45,13 +46,15 @@ const runTests = async (payload) => {
 
 // await runTests(policySuitesPayload)
 
-let one = await runTests(payloadNewPolicy)
-let two = await runTests(payloadReNewForI)
-let three = await runTests(payloadReNewForNoExpiry)
-let four = await runTests(payloadReNewForExpiringIn90)
-let five = await runTests(payloadReNewForExpired90DaysAgo)
+// let one = await runTests(payloadNewPolicy)
+// let two = await runTests(payloadReNewForI)
+// let three = await runTests(payloadReNewForNoExpiry)
+// let four = await runTests(payloadReNewForExpiringIn90)
+// let five = await runTests(payloadReNewForExpired90DaysAgo)
 
-let res = [...one, ...two, ...three, ...four, ...five]
+// let res = [...one, ...two, ...three, ...four, ...five]
+
+let res = await runTests(mixedPolicySuitesPayload)
 
 if (process.env.DO_SLACK == "true") {
   console.log("Doing Slack")

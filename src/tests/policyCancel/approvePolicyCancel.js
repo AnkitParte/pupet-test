@@ -1,4 +1,4 @@
-import { adminLoginPage } from "../globals/adminLoginPage.js"
+import { adminLoginPage } from "../../globals/adminLoginPage.js"
 import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
 import { dealershipExecutive } from "../../loginCreds/index.js"
 
@@ -7,6 +7,7 @@ export const approvePolicyCancel = async ({ page }) => {
 
   let insuCancelHist = '#root li a[href="/cancellation"]'
   await page.waitForSelector("#root div div")
+  await waitForTimeout(1000)
   await page.waitForSelector(insuCancelHist)
   await page.click(insuCancelHist)
 

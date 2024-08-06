@@ -1,18 +1,19 @@
 import puppeteer from "puppeteer"
 import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../globals/loginPage.js"
+import { loginPage } from "../../globals/loginPage.js"
 import { requestCancel } from "./requestPolicyCancel.js"
 import { approvePolicyCancel } from "./approvePolicyCancel.js"
 
 // let args = process.argv.slice(2)
-export const policyCancel = async () => {
+export const policyCancel = async (data) => {
+  let { headless = false } = data
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    headless: false,
+    headless: headless,
     executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
-    slowMo: 20
+    slowMo: 30
   })
   try {
     const page = await browser.newPage()
@@ -34,12 +35,12 @@ export const policyCancel = async () => {
     await adminPage.goto(adminSourceURL)
     await approvePolicyCancel({ page: adminPage })
 
-    // await browser.close()
+    await browser.close()
     return {
       status: true
     }
   } catch (e) {
-    // await browser.close()
+    await browser.close()
     console.log("error", e)
     return {
       status: false,

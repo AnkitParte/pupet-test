@@ -1,11 +1,16 @@
-import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
-import { loginPage } from "../globals/loginPage.js"
+import { chooseOptViaSelector, clearSelectorValue, waitForTimeout } from "../../utils/functions.js"
 
-export async function quotePage({ page, isRenew, renewOpt, customerType }) {
+export async function quotePage({ page, isRenew, renewOpt, customerType, bikeDetails }) {
   //? create insurance instant-quote form fill
   // console.log(await page.$("#make"))
   await page.waitForSelector("#instant-quote")
   // console.log("quote page")
+  await waitForTimeout(2000)
+  let resetBtn = "#resetQuoteForm"
+  await page.waitForSelector(resetBtn)
+  await page.click(resetBtn)
+
+  let { make, model, rto, pincode, idv } = bikeDetails
 
   if (isRenew) {
     let selRenewPol = "#newPolicy1false"
@@ -38,17 +43,23 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
     }
   }
   // console.log("make")
-  await page.waitForSelector("div#make")
-  await page.click("div#make")
+  let makeSel = "div#make"
+  await page.waitForSelector(makeSel)
+  await page.click(makeSel)
   await waitForTimeout(500)
+  await page.type(makeSel, make)
+  await waitForTimeout(200)
   await page.waitForSelector("#make .css-i97cuk-menu", { visible: true })
   await page.click("#make .css-i97cuk-menu")
   await waitForTimeout(1000)
 
   // console.log("model")
-  await page.waitForSelector("div#model")
-  await page.click("div#model")
+  let modelSel = "div#model"
+  await page.waitForSelector(modelSel)
+  await page.click(modelSel)
   await waitForTimeout(500)
+  await page.type(modelSel, model)
+  await waitForTimeout(200)
   await page.waitForSelector("#model .css-i97cuk-menu", { visible: true })
   await page.click("#model .css-i97cuk-menu")
   await waitForTimeout(1000)
@@ -59,27 +70,6 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   await waitForTimeout(500)
   await page.waitForSelector("#variant .css-i97cuk-menu", { visible: true })
   await page.click("#variant .css-i97cuk-menu")
-
-  // await page.waitForSelector('select[name="variant"]', { visible: true })
-  // await page.click('select[name="variant"]')
-
-  // let variantOpt = await page.evaluate(() => {
-  //   const variant = document.querySelector('select[name="variant"]')
-  //   // console.log("variant", variant)
-  //   let options = () => {
-  //     for (const option of variant.childNodes) {
-  //       console.log("option", option)
-  //       if (option.value) {
-  //         option.selected = "selected"
-  //         return option.getAttribute("value")
-  //       }
-  //     }
-  //   }
-  //   // console.log(options())
-  //   return options()
-  // })
-
-  // await page.select('select[name="variant"]', variantOpt)
 
   //? no need if date is auto-selected
   //   await page.waitForSelector('input[name="riskStartDate"]', { visible: true })
@@ -179,6 +169,17 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   }
   // console.log("Registration Date added successfully!")
 
+  //? rto
+  let rtoSel = "div#rto"
+  await page.waitForSelector(rtoSel)
+  await page.click(rtoSel)
+  await waitForTimeout(500)
+  await page.type(rtoSel, rto)
+  await waitForTimeout(2000)
+  await page.waitForSelector("#rto .css-i97cuk-menu", { visible: true })
+  await page.click("#rto .css-i97cuk-menu")
+  await waitForTimeout(1000)
+
   //? customer type auto-selected
   //   await page.waitForSelector('select[name="customerType"]', { visible: true })
   let customerTypeSel = 'select[name="customerType"]'
@@ -193,14 +194,16 @@ export async function quotePage({ page, isRenew, renewOpt, customerType }) {
   await page.evaluate((selector) => {
     document.querySelector(selector).value = ""
   }, pincodeSel)
-  await page.type(pincodeSel, "122001")
+  await page.type(pincodeSel, pincode)
   await waitForTimeout(1000)
 
-  if (isRenew) {
-    await page.waitForSelector('input[name="idv"]')
-    await page.click('input[name="idv"]')
-    await page.type('input[name="idv"]', "50000")
-  }
+  // if (isRenew) {
+  let idvSel = 'input[name="idv"]'
+  await page.waitForSelector(idvSel)
+  await page.click(idvSel)
+  await clearSelectorValue(page, idvSel)
+  await page.type(idvSel, idv)
+  // }
 
   //   console.log(await page.$('form button[type="submit"]'))
   await page.waitForSelector('form button[type="submit"]') // Replace with the actual selector for the submit button

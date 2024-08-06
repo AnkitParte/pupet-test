@@ -37,6 +37,7 @@ export const htmlOutput = (title, data) => {
             <th>S.No.</th>
             <th>Description</th>
             <th>Status</th>
+            <th>Insurer</th>
             <th>Message</th>
           </tr>
           <tbody>
@@ -49,6 +50,7 @@ export const htmlOutput = (title, data) => {
                 <td>${idx + 1}</td>
                 <td>${item.title}</td>
                 <td ${statusStyle}>${item.status}</td>
+                <td>${item.insurer}</td>
                 <td>${item.message}</td>
               </tr>
             `
