@@ -1,5 +1,5 @@
-import { waitForTimeout } from "../../utils/functions.js"
-import { jpgFile, pngFile } from "../../utils/constants.js"
+import { waitForTimeout } from "../../../utils/functions.js"
+import { jpgFile, pngFile } from "../../../utils/constants.js"
 
 export async function inspectionPage(page, customerType) {
   await page.waitForSelector("#Inspection")

@@ -1,4 +1,4 @@
-import { createCertTest } from "../tests/createCert/index.js"
+import { createCertTest } from "../tests/Certificate/createCert/index.js"
 import { htmlOutput } from "../utils/outputHelper.js"
 import { postToSlackChannel } from "../utils/postToSlack.js"
 import { certSuitesPayload, payloadNewCorp, payloadNewIndividual, payloadReNewCorp, payloadReNewIndividual } from "./suitePayload/certSuitePayload.js"

@@ -1,4 +1,4 @@
-import { createInsuTest } from "../tests/createInsu/index.js"
+import { createInsuTest } from "../tests/Insurance/createInsu/index.js"
 import {
   payloadReNewForExpired90DaysAgo,
   payloadReNewForExpiringIn90,
@@ -8,7 +8,6 @@ import {
   payloadNewPolicy,
   mixedPolicySuitesPayload
 } from "./suitePayload/policySuitePayload.js"
-import fs from "fs"
 import { postToSlackChannel } from "../utils/postToSlack.js"
 import dotenv from "dotenv"
 dotenv.config({ path: "../../.env" })

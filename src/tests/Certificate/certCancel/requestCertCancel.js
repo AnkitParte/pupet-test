@@ -1,12 +1,12 @@
-import { testPdf } from "../../utils/constants.js"
-import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
+import { testPdf } from "../../../utils/constants.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../../utils/functions.js"
 
-export const requestCancel = async ({ page }) => {
-  let insuHist = '#root li a[href="/policies/my-insurance"]'
+export const requestCertCancel = async ({ page }) => {
+  let certHist = '#root li a[href="/policies/my-certificates"]'
   await page.waitForSelector("#root div div")
   await waitForTimeout(1000)
-  await page.waitForSelector(insuHist)
-  await page.click(insuHist)
+  await page.waitForSelector(certHist)
+  await page.click(certHist)
 
   let filterDd = 'select[name="statusFilter"]'
 
@@ -20,13 +20,13 @@ export const requestCancel = async ({ page }) => {
   await page.click('tbody tr:nth-of-type(1) td div[class="dropdown"]')
 
   await page.waitForSelector('tbody tr:nth-of-type(1) td div div a[role="menuitem"]')
-  await page.click("tbody tr:nth-of-type(1) td div div #cancelPolicy")
+  await page.click("tbody tr:nth-of-type(1) td div div #cancelCertificate")
 
   // body > div:nth-child(7) > div > div.modal.fade.show
   // /html/body/div[3]/div/div[1]
 
-  let cancelReasonDd = 'select[name="cancelReason"]'
-  await chooseOptViaSelector({ page, selector: cancelReasonDd })
+  let cancelReasonDd = 'select[name="cancelReason"]' // value="Certificate cancelled as vehicle not delivered due to technical fault"
+  await chooseOptViaSelector({ page, selector: cancelReasonDd, optVal: "Certificate cancelled as vehicle not delivered due to technical fault" })
 
   let proofOne = 'input[name="proofFile1"]'
   let invoiceCopy = await page.waitForSelector(proofOne)
@@ -38,13 +38,13 @@ export const requestCancel = async ({ page }) => {
   await dealerDecl.uploadFile(testPdf)
   await waitForTimeout(1500)
 
-  let submitSel = "#requestCancelPolicyBtn"
+  let submitSel = "#requestCancelCertBtn"
   await page.waitForSelector(submitSel)
   await page.click(submitSel)
 
   await page.waitForSelector("#successToast", { timeout: 50000 })
   let checkIfSucceed = await page.$("#successToast")
   if (!checkIfSucceed) {
-    throw new Error("Failed to request policy cancellation")
+    throw new Error("Failed to request certificate cancellation")
   }
 }

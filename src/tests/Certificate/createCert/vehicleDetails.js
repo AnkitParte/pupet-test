@@ -1,4 +1,4 @@
-import { waitForTimeout } from "../../utils/functions.js"
+import { waitForTimeout } from "../../../utils/functions.js"
 
 export const vehicleDetails = async ({ page }) => {
   await page.waitForSelector("div#make")

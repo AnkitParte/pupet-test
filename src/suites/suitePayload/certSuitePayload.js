@@ -119,3 +119,25 @@ export let payloadReNewCorp = [
 ]
 
 export let certSuitesPayload = [...payloadNewIndividual, ...payloadReNewIndividual, ...payloadNewCorp, ...payloadReNewCorp]
+
+export let newCertForI = {
+  id: 1,
+  type: "new",
+  for: "Individual",
+  forId: "I",
+  planType: "fixed",
+  title: "New Certificate for Individual for Fixed plan",
+  status: "😢Pending",
+  headless: true
+}
+
+export let newCertForC = {
+  id: 7,
+  type: "new",
+  for: "Corporate",
+  forId: "C",
+  planType: "fixed",
+  title: "New Certificate for Corporate for Fixed plan",
+  status: "😢Pending",
+  headless: true
+}

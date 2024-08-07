@@ -1,5 +1,5 @@
-import { UNITED } from "../../utils/constants.js"
-import { chooseOptViaSelector, clearSelectorValue, customDateSelector, waitForTimeout } from "../../utils/functions.js"
+import { UNITED } from "../../../utils/constants.js"
+import { chooseOptViaSelector, clearSelectorValue, customDateSelector, waitForTimeout } from "../../../utils/functions.js"
 
 export async function kycPage({ page, customerType = "I", companyType, insurer }) {
   await page.waitForSelector("#KYC")

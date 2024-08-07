@@ -1,15 +1,14 @@
 import puppeteer from "puppeteer"
-import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../../globals/loginPage.js"
+import { FE_URL } from "../../../utils/constants.js"
+import { loginPage } from "../../../globals/loginPage.js"
 import { basicDetails } from "./basicDetails.js"
 import { vehicleDetails } from "./vehicleDetails.js"
 import { nomineeDetails } from "./nomineeDetails.js"
 import { certPlanBox } from "./certPlanBox.js"
-import { waitForTimeout } from "../../utils/functions.js"
+import { waitForTimeout } from "../../../utils/functions.js"
 
 export const createCertTest = async (data) => {
-  let { type, forId, planType: planTypeId, headlessOff = false } = data
-  let head = headlessOff ? false : true
+  let { type, forId, planType: planTypeId, headless = false } = data
   let isRenew = type == "renew" ? true : false
 
   let customerType = forId
@@ -17,19 +16,19 @@ export const createCertTest = async (data) => {
   // console.log("")
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    headless: false,
     executablePath: "/opt/homebrew/bin/chromium",
     defaultViewport: null,
     ignoreHTTPSErrors: true,
     slowMo: 25,
-    headless: head
+    headless: headless
   })
   try {
-    if (!head) {
+    if (!headless) {
       console.log("Going Head full")
     }
+    console.log("Certificate Creation")
     const page = await browser.newPage()
-    let sourceURL = FE_URL.Loc
+    let sourceURL = FE_URL.Dev
     // console.log(sourceURL)
     await page.goto(sourceURL)
 
@@ -67,12 +66,16 @@ export const createCertTest = async (data) => {
     if (customerType == "I") await nomineeDetails({ page })
 
     await certPlanBox({ page, planType })
-    await browser.close()
+    if (headless) {
+      await browser.close()
+    }
     return {
       status: true
     }
   } catch (e) {
-    await browser.close()
+    if (headless) {
+      await browser.close()
+    }
     // console.log(`error ${customerType}`, e)
     return {
       status: false,

@@ -1,4 +1,4 @@
-import { chooseOptViaSelector, clearSelectorValue, waitForTimeout } from "../../utils/functions.js"
+import { chooseOptViaSelector, clearSelectorValue, waitForTimeout } from "../../../utils/functions.js"
 
 export async function quotePage({ page, isRenew, renewOpt, customerType, bikeDetails }) {
   //? create insurance instant-quote form fill

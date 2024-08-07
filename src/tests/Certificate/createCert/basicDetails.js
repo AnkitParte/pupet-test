@@ -1,4 +1,4 @@
-import { chooseOptViaSelector, customDateSelector } from "../../utils/functions.js"
+import { chooseOptViaSelector, customDateSelector } from "../../../utils/functions.js"
 
 export const basicDetails = async ({ page, customerType }) => {
   let customerTypeSel = 'select[name="customerType"]'

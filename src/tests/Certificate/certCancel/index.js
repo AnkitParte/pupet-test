@@ -1,10 +1,10 @@
 import puppeteer from "puppeteer"
-import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../../globals/loginPage.js"
-import { requestPolicyEndorse } from "./requestPolicyEndorse.js"
-import { approvePolicyEndorse } from "./approvePolicyEndorse.js"
+import { FE_URL } from "../../../utils/constants.js"
+import { loginPage } from "../../../globals/loginPage.js"
+import { requestCertCancel } from "./requestCertCancel.js"
+import { approveCertCancel } from "./approveCertCancel.js"
 
-export const policyEndorse = async (data) => {
+export const certCancel = async (data) => {
   let { headless = false } = data
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -14,34 +14,33 @@ export const policyEndorse = async (data) => {
     ignoreHTTPSErrors: true,
     slowMo: 30
   })
-
   try {
+    console.log("Creating Cancellation")
     const page = await browser.newPage()
 
-    let sourceURL = FE_URL.Loc
-    let adminSourceURL = FE_URL.adminLoc
-    console.log("sourceURL", sourceURL)
-    console.log("adminSourceURL", adminSourceURL)
+    let sourceURL = FE_URL.Dev
+    let adminSourceURL = FE_URL.adminDev
+    // console.log(sourceURL)
     await page.goto(sourceURL)
     //   await page.setViewport({ width: 1080, height: 900 })
 
     //? login page
     await loginPage(page)
 
-    //? request a policy endorsement
-    await requestPolicyEndorse({ page })
+    //? request a policy cancellation
+    await requestCertCancel({ page })
 
-    //? approve a policy endorsement
+    //? approve a policy cancellation
     const adminPage = await browser.newPage()
     await adminPage.goto(adminSourceURL)
-    await approvePolicyEndorse({ page: adminPage })
+    await approveCertCancel({ page: adminPage })
 
-    await browser.close()
+    // await browser.close()
     return {
       status: true
     }
   } catch (e) {
-    await browser.close()
+    // await browser.close()
     console.log("error", e)
     return {
       status: false,

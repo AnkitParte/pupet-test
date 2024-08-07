@@ -1,6 +1,6 @@
-import { adminLoginPage } from "../../globals/adminLoginPage.js"
-import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
-import { dealershipExecutive } from "../../loginCreds/index.js"
+import { adminLoginPage } from "../../../globals/adminLoginPage.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../../utils/functions.js"
+import { dealershipExecutive } from "../../../loginCreds/index.js"
 
 export const approvePolicyCancel = async ({ page }) => {
   await adminLoginPage(page)

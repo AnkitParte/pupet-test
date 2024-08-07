@@ -342,5 +342,25 @@ export let mixedPolicySuitesPayload = [
       idv: "74195"
     },
     headlessOff: false
+  },
+  {
+    id: 6,
+    vehicleType: "renew",
+    forCustomer: "Individual",
+    customerType: "I",
+    corporateType: "",
+    corporateTypeId: "",
+    title: "Re-New policy for Individual when not-expired",
+    renewOption: "2",
+    status: "😢Pending",
+    insurer: UNITED,
+    bikeDetails: {
+      make: "hero motocorp",
+      model: "destini",
+      rto: "hr26",
+      pincode: "122005",
+      idv: "84500"
+    },
+    headlessOff: false
   }
 ]

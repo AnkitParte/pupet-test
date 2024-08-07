@@ -1,4 +1,4 @@
-import { clearSelectorValue, waitForTimeout } from "../../utils/functions.js"
+import { clearSelectorValue, waitForTimeout } from "../../../utils/functions.js"
 
 export async function policyPage({ page, isRenew, renewOpt, customerType }) {
   await page.waitForSelector("#AdditionalDetails")

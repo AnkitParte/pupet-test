@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer"
-import { FE_URL } from "../../utils/constants.js"
+import { FE_URL } from "../../../utils/constants.js"
 import { kycPage } from "./kycPage.js"
 import { quotePage } from "./quotePage.js"
-import { loginPage } from "../../globals/loginPage.js"
+import { loginPage } from "../../../globals/loginPage.js"
 import { policyPage } from "./policyPage.js"
 import { inspectionPage } from "./inspectPage.js"
-import { waitForTimeout } from "../../utils/functions.js"
+import { waitForTimeout } from "../../../utils/functions.js"
 
 export const createInsuTest = async (data) => {
   let {
@@ -33,7 +33,7 @@ export const createInsuTest = async (data) => {
     if (!head) {
       console.log("Going Head full")
     }
-    let sourceURL = FE_URL.Loc
+    let sourceURL = FE_URL.Dev
     // console.log(sourceURL)
     await page.goto(sourceURL)
     //   await page.setViewport({ width: 1080, height: 900 })

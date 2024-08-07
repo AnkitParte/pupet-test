@@ -1,4 +1,4 @@
-import { chooseOptViaSelector } from "../../utils/functions.js"
+import { chooseOptViaSelector } from "../../../utils/functions.js"
 
 export const nomineeDetails = async ({ page }) => {
   let nomineeName = 'input[name="nomineeName"]'

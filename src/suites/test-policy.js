@@ -1,9 +1,11 @@
-import { createInsuTest } from "../tests/createInsu/index.js"
+import { createInsuTest } from "../tests/Insurance/createInsu/index.js"
 import { changeConfigInsurer, loginAdminApiCall } from "../globals/api/adminPanelApi.js"
-import { policyCancel } from "../tests/policyCancel/index.js"
-import { policyEndorse } from "../tests/policyEndorse/index.js"
+import { policyCancel } from "../tests/Insurance/policyCancel/index.js"
+import { policyEndorse } from "../tests/Insurance/policyEndorse/index.js"
 import { postToSlackChannel } from "../utils/postToSlack.js"
 import { mixedPolicySuitesPayload } from "./suitePayload/policySuitePayload.js"
+import dotenv from "dotenv"
+dotenv.config({ path: "../../.env" })
 
 let adminLogin = await loginAdminApiCall()
 let accessToken
@@ -84,6 +86,21 @@ const runTests = async (accessToken) => {
     }
   }
 
+  // For United Renew
+  let unitedPolicyLoadRenew = mixedPolicySuitesPayload?.[5]
+  const unitedInsurerRenew = await changeConfigInsurer({ accessToken, insurer: unitedPolicyLoadRenew?.insurer })
+  let unitedPolicyRenew
+  if (unitedInsurerRenew?.status == 200) {
+    unitedPolicyRenew = await createInsuTest(unitedPolicyLoad)
+    if (unitedPolicyRenew?.status) {
+      unitedPolicyLoadRenew.status = "✅ Succeed"
+    } else {
+      unitedPolicyLoadRenew.status = "❌ Failed"
+      unitedPolicyLoadRenew.message = unitedPolicyRenew?.message
+      // unitedPolicyLoadRenew.errorJson = unitedPolicyLoad?.errorJson
+    }
+  }
+
   let policyEndorseRes = await policyEndorse({ headless: true })
   let policyEndorseLoad = {
     id: 6,
@@ -109,7 +126,16 @@ const runTests = async (accessToken) => {
     policyCancelLoad.status = "❌ Failed"
     policyCancelLoad.message = policyCancelRes?.message
   }
-  let res = [unitedPolicyLoad, shriRamPolicyLoad, tataPolicyLoad, iciciPolicyLoad, bajajPolicyLoad, policyEndorseLoad, policyCancelLoad]
+  let res = [
+    unitedPolicyLoad,
+    shriRamPolicyLoad,
+    tataPolicyLoad,
+    iciciPolicyLoad,
+    bajajPolicyLoad,
+    unitedPolicyLoadRenew,
+    policyEndorseLoad,
+    policyCancelLoad
+  ]
   res = res.map((item) => {
     delete item?.customerType
     delete item?.corporateType
@@ -129,10 +155,13 @@ if (adminLogin.status == 200) {
   accessToken = adminLogin.accessToken
   console.log("Admin login done")
   let res = await runTests(accessToken)
-  console.log("Doing Slack")
-  let suiteName = "Ds-Policy-Testing" // directory name in s3
-  let suiteTitle = "Policy-Create-Endorse-Cancel" // name of file in s3 directory
-  // await postToSlackChannel(res, suiteName, suiteTitle)
+  console.log("doSlackVar -> ", process.env.DO_SLACK)
+  if (process.env.DO_SLACK == "true") {
+    console.log("Doing Slack")
+    let suiteName = "Ds-Policy-Testing" // directory name in s3
+    let suiteTitle = "Policy-Create-Endorse-Cancel" // name of file in s3 directory
+    await postToSlackChannel(res, suiteName, suiteTitle)
+  }
 } else {
   console.log("Admin login failed")
 }

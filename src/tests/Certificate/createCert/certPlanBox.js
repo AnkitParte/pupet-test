@@ -1,4 +1,4 @@
-import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../../utils/functions.js"
 
 export const certPlanBox = async ({ page, planType = "fixed" }) => {
   let planValue = "93aa4c77"

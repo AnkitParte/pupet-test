@@ -1,7 +1,7 @@
-import { dealershipExecutive } from "../../loginCreds/index.js"
-import { testPdf } from "../../utils/constants.js"
-import { chooseOptViaSelector, waitForTimeout } from "../../utils/functions.js"
-import { adminLoginPage } from "../../globals/adminLoginPage.js"
+import { dealershipExecutive } from "../../../loginCreds/index.js"
+import { testPdf } from "../../../utils/constants.js"
+import { chooseOptViaSelector, waitForTimeout } from "../../../utils/functions.js"
+import { adminLoginPage } from "../../../globals/adminLoginPage.js"
 
 export const approvePolicyEndorse = async ({ page }) => {
   await adminLoginPage(page)

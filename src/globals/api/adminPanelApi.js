@@ -5,10 +5,10 @@ import dotenv from "dotenv"
 dotenv.config({ path: "../../../.env" })
 
 console.log("LOGIN_URL", process.env.LOGIN_URL)
-let loginUrl = process.env.LOGIN_URL
+let loginUrl = process.env.LOGIN_URL || "https://35pbqpolz2.execute-api.ap-south-1.amazonaws.com/dev/user/cognito/login"
 // console.log("LOGIN_URL", loginUrl)
 console.log("CONFIG_URL", process.env.CONFIG_URL)
-let configApiUrl = process.env.CONFIG_URL
+let configApiUrl = process.env.CONFIG_URL || "https://35pbqpolz2.execute-api.ap-south-1.amazonaws.com/dev/dynamic-config/dealership/insurer-denied"
 // console.log("CONFIG_URL", configApiUrl)
 
 export const changeConfigInsurer = async ({ accessToken, insurer }) => {

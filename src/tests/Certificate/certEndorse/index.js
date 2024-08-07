@@ -1,11 +1,10 @@
 import puppeteer from "puppeteer"
-import { FE_URL } from "../../utils/constants.js"
-import { loginPage } from "../../globals/loginPage.js"
-import { requestCancel } from "./requestPolicyCancel.js"
-import { approvePolicyCancel } from "./approvePolicyCancel.js"
+import { FE_URL } from "../../../utils/constants.js"
+import { loginPage } from "../../../globals/loginPage.js"
+import { requestCertEndorse } from "./requestCertEndorse.js"
+import { approveCertEndorse } from "./approveCertEndorse.js"
 
-// let args = process.argv.slice(2)
-export const policyCancel = async (data) => {
+export const certEndorse = async (data) => {
   let { headless = false } = data
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -15,32 +14,35 @@ export const policyCancel = async (data) => {
     ignoreHTTPSErrors: true,
     slowMo: 30
   })
+
   try {
+    console.log("Creating Endorsement")
     const page = await browser.newPage()
 
-    let sourceURL = FE_URL.Loc
-    let adminSourceURL = FE_URL.adminLoc
-    console.log(sourceURL)
+    let sourceURL = FE_URL.Dev
+    let adminSourceURL = FE_URL.adminDev
+    // console.log("sourceURL", sourceURL)
+    // console.log("adminSourceURL", adminSourceURL)
     await page.goto(sourceURL)
     //   await page.setViewport({ width: 1080, height: 900 })
 
     //? login page
     await loginPage(page)
 
-    //? request a policy cancellation
-    await requestCancel({ page })
+    //? request a policy endorsement
+    await requestCertEndorse({ page })
 
-    //? approve a policy cancellation
+    //? approve a policy endorsement
     const adminPage = await browser.newPage()
     await adminPage.goto(adminSourceURL)
-    await approvePolicyCancel({ page: adminPage })
+    await approveCertEndorse({ page: adminPage })
 
-    await browser.close()
+    // await browser.close()
     return {
       status: true
     }
   } catch (e) {
-    await browser.close()
+    // await browser.close()
     console.log("error", e)
     return {
       status: false,
